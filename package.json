@@ -21,7 +21,8 @@
     "redux-persist": "^6.0.0",
     "reselect": "^4.0.0",
     "styled-components": "^5.0.1",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "uuid": "^7.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
