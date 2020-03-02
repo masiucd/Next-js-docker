@@ -15,12 +15,14 @@ const IncomeExpense: React.FC<P> = ({ income, expense }) => (
     <div className="income">
       <span>
         income:
+        {' '}
         {income}
       </span>
     </div>
     <div className="expense">
       <span>
         expense:
+        {' '}
         {expense}
       </span>
     </div>

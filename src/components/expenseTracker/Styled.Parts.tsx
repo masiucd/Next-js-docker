@@ -36,8 +36,7 @@ export const StyleHeader = styled.div`
 export const StyleBalanceWrapper = styled.div`
   ${Default};
   margin: 4rem 0 0 1rem 0;
-  /* TODO: DELETE */
-  border: 2px solid red;
+
   h3{
     font-size: 2.2rem;
   }
@@ -47,13 +46,14 @@ export const StyleBalanceWrapper = styled.div`
 `;
 
 export const StyleExpenseVsBalance = styled.div`
-  /* TODO: DELETE */
-  border: 2px solid black;
+  border-radius: 1rem;
+  border: 2px solid ${(props) => props.theme.colors.primary};
   display: flex;
   justify-content: space-evenly;
   ${Default};
   margin: 2rem 0;
-  background: ${(props) => props.theme.colors.darkRGBA};
+  background: rgb(2,0,36);
+background: linear-gradient(90deg, rgba(0,0,6,0.6671043417366946) 16%, rgba(11,11,11,0.639093137254902) 47%, rgba(14,13,6,0.8998774509803921) 100%);
   color: ${(props) => props.theme.colors.white};
   .income{
 

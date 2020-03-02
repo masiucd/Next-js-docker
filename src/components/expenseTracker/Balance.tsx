@@ -13,11 +13,11 @@ const Balance: React.FC<P> = ({ currentBalance }) => (
   <StyleBalanceWrapper>
     {' '}
     <h3>
-      {' '}
+
       Balance:
-      {' '}
+
       {currentBalance}
-      {' '}
+
     </h3>
     {' '}
   </StyleBalanceWrapper>
