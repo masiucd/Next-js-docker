@@ -12,7 +12,8 @@ export default (state: IExpenseState = initialState, action: ExpenseActionType) 
     case ActionTypesIncome.GET_TRANSACTIONS:
       return {
         ...state,
-        transactions: [state.transactions, action.payload],
+        transactions: action.payload,
+        // transactions: [...state.transactions, action.payload],
       };
     default:
       return state;

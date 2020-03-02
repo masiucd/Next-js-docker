@@ -1,18 +1,29 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { StyleBalanceWrapper } from './Styled.Parts';
+import { AppState } from '../../redux';
+import { selectCalculateBalance } from '../../redux/expenseCalculator/expense.selector';
+
 
 interface P {
-
+  currentBalance: number;
 }
 
-const Balance: React.FC<P> = () => {
-  let a;
-  return (
-    <StyleBalanceWrapper>
+const Balance: React.FC<P> = ({ currentBalance }) => (
+  <StyleBalanceWrapper>
+    {' '}
+    <h3>
       {' '}
-      <h3> Balance: </h3>
+      Balance:
       {' '}
-    </StyleBalanceWrapper>
-  );
-};
-export default Balance;
+      {currentBalance}
+      {' '}
+    </h3>
+    {' '}
+  </StyleBalanceWrapper>
+);
+
+const mapStateToProps = (state: AppState) => ({
+  currentBalance: selectCalculateBalance(state),
+});
+export default connect(mapStateToProps)(Balance);

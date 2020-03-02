@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
-import uuid from 'uuid/v4';
+import uuid from 'uuid';
 
 export interface IExpenseData {
   id: string;
@@ -10,22 +10,23 @@ export interface IExpenseData {
 
 const expenseData: IExpenseData[] = [
   {
-    id: uuid(),
+    // id: uuid,
+    id: 'lo21212!!@@@1',
     title: 'Vacation',
     amount: -300,
   },
   {
-    id: uuid(),
+    id: 'losda@#12',
     title: 'income',
     amount: +1200,
   },
   {
-    id: uuid(),
+    id: 'apa3@@@1122',
     title: 'Lunch',
     amount: -5,
   },
   {
-    id: uuid(),
+    id: 's231232100sa',
     title: 'cinema movie',
     amount: -8,
   },

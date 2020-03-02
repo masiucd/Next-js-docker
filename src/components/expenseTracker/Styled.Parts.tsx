@@ -9,6 +9,7 @@ export const StyleIncomeExpWrapper = styled.div`
   width: 100%;
   padding: 1rem;
   box-shadow: ${(props) => props.theme.shadow.lightShadow};
+  border-radius: 1rem;
 `;
 
 
@@ -23,6 +24,12 @@ export const StyleHeader = styled.div`
   padding: .5rem;
   @media(min-width:900px){
     flex-direction: row;
+  }
+  div{
+    width: 35%;
+  }
+  section{
+    width: 75%;
   }
 `;
 

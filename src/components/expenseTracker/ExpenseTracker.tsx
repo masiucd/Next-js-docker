@@ -1,16 +1,24 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-shadow */
+/* eslint-disable import/extensions */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import Title from '../styled/layout/title/Title';
 import Balance from './Balance';
 import IncomeExpense from './IncomeExpense';
 import List from './list/List';
 import { StyleHeader, StyleIncomeExpWrapper } from './Styled.Parts';
+import { getExpenses } from '../../redux/expenseCalculator/expense.actions';
 
 interface P {
-
+  getExpenses: () => void;
 }
 
-const ExpenseTracker: React.FC<P> = () => {
-  let a;
+const ExpenseTracker: React.FC<P> = ({ getExpenses }) => {
+  React.useEffect(() => {
+    getExpenses();
+  }, []);
+
   return (
     <StyleIncomeExpWrapper>
       <StyleHeader>
@@ -22,4 +30,6 @@ const ExpenseTracker: React.FC<P> = () => {
     </StyleIncomeExpWrapper>
   );
 };
-export default ExpenseTracker;
+
+
+export default connect(null, { getExpenses })(ExpenseTracker);
