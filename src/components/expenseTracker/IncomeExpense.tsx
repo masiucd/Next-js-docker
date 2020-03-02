@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { StyleExpenseVsBalance } from './Styled.Parts';
 
 interface P {
 
@@ -7,11 +8,10 @@ interface P {
 const IncomeExpense: React.FC<P> = () => {
   let a;
   return (
-    <div>
-      {' '}
-      <h1> IncomeExpense </h1>
-      {' '}
-    </div>
+    <StyleExpenseVsBalance>
+      <div className="income"><span>income:</span></div>
+      <div className="expense"><span>expense:</span></div>
+    </StyleExpenseVsBalance>
   );
 };
 export default IncomeExpense;

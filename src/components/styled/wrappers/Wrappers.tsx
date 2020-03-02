@@ -11,8 +11,6 @@ const DefaultStyles = css`
 
 export const AppWrapper = styled.div`
   ${DefaultStyles};
-  /* TODO: Remove */
-  border: 2px solid red;
   width: 100%;
   padding: 0 .5rem;
   margin: 2rem auto;

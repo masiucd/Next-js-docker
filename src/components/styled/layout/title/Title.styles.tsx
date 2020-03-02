@@ -9,11 +9,9 @@ export const StyTitle = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items:center;
-  position: absolute;
-  top: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
+  margin: 2rem auto;
   width: 90%;
+
 `;
 
 export const StyH1 = styled.h1`

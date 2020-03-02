@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { StyleBalanceWrapper } from './Styled.Parts';
 
 interface P {
 
@@ -7,11 +8,11 @@ interface P {
 const Balance: React.FC<P> = () => {
   let a;
   return (
-    <div>
+    <StyleBalanceWrapper>
       {' '}
-      <h1> Balance </h1>
+      <h3> Balance: </h3>
       {' '}
-    </div>
+    </StyleBalanceWrapper>
   );
 };
 export default Balance;

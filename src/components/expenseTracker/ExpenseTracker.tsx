@@ -3,6 +3,7 @@ import Title from '../styled/layout/title/Title';
 import Balance from './Balance';
 import IncomeExpense from './IncomeExpense';
 import List from './list/List';
+import { StyleHeader, StyleIncomeExpWrapper } from './Styled.Parts';
 
 interface P {
 
@@ -11,12 +12,14 @@ interface P {
 const ExpenseTracker: React.FC<P> = () => {
   let a;
   return (
-    <div>
-      <Title mainTitle="Income Tracker" subTitle="keep your income in control" />
-      <Balance />
+    <StyleIncomeExpWrapper>
+      <StyleHeader>
+        <Balance />
+        <Title mainTitle="Income Tracker" subTitle="keep your income in control" />
+      </StyleHeader>
       <IncomeExpense />
       <List />
-    </div>
+    </StyleIncomeExpWrapper>
   );
 };
 export default ExpenseTracker;
