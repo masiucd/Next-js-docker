@@ -6,9 +6,37 @@ const Default = css`
   border-radius: .6rem;
 `;
 
+const FlexStyles = css`
+  display: flex;
+  justify-content: center;
+  align-items:center;
+`;
+
+const BtnStyles = css`
+  font-size: 1rem;
+  border: 2px solid ${(props) => props.theme.colors.primary};
+  padding: .4rem 1rem;
+  margin: 0 .4rem;
+  border-radius: .6rem;
+  width: 7rem;
+  box-shadow: ${({ theme }) => theme.shadow.lightShadow};
+  transition: ${({ theme }) => theme.transition.quickTransition};
+  cursor: pointer;
+  position: relative;
+  &:hover{
+    box-shadow: ${({ theme }) => theme.shadow.darkShadow};
+  }
+`;
+
 export const ListWrapper = styled.div`
   ${Default};
-
+  .no-items-msg{
+    font-size: 2.5rem;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    padding: .1rem 0 2rem 0;
+  }
 `;
 
 
@@ -34,19 +62,7 @@ export const StyledListItem = styled.section`
   }
   .btn-group{
     span{
-      font-size: 1rem;
-      border: 2px solid ${(props) => props.theme.colors.primary};
-      padding: .4rem 1rem;
-      margin: 0 .4rem;
-      border-radius: .6rem;
-      width: 7rem;
-      box-shadow: ${({ theme }) => theme.shadow.lightShadow};
-      transition: ${({ theme }) => theme.transition.quickTransition};
-      cursor: pointer;
-      position: relative;
-      &:hover{
-        box-shadow: ${({ theme }) => theme.shadow.darkShadow};
-      }
+      ${BtnStyles};
     }
     span:first-child{
       background: ${(props) => props.theme.colors.primary};
@@ -77,11 +93,54 @@ export const StyledListItem = styled.section`
 
 export const ListFormWrapper = styled.div`
   ${Default};
+  border: 2px solid red;
+  ${FlexStyles};
+
 `;
 
 export const StyledListForm = styled.form`
-
+  ${Default};
+  ${FlexStyles};
+  flex-direction: column;
+  border: 2px solid green;
+  width: 90%;
+  label{
+    span{
+      font-size: 1.2rem;
+      text-transform: capitalize;
+    }
+  }
+  button{
+    ${BtnStyles};
+    width: 35%;
+    background: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.white};
+    @media(max-width: 780px){
+      width: 10rem;
+    }
+  }
 `;
+
+
 export const Input = styled.input`
+  width: 15rem;
+  border: 1px solid ${(props) => props.theme.colors.primary};
+  box-shadow:  ${(props) => props.theme.shadow.lightShadow};
+  padding: .2rem .6rem;
+  font-size: 1.2rem;
+  border-radius: .5rem;
+  margin: .7rem 0;
+  outline: none;
+  transition: ${(props) => props.theme.transition.mainTransition};
+  &:focus{
+    border: 2px solid ${(props) => props.theme.colors.primary};
+    box-shadow:  ${(props) => props.theme.shadow.lightShadow};
+  }
+  @media(min-width:600px){
+    width: 20rem;
+  }
+  @media(min-width:850px){
+    width: 30rem;
+  }
 
 `;

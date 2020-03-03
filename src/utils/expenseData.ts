@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
-import uuid from 'uuid';
+// import uuid from 'uuid/v';
+const uuid = require('uuid/v4');
+// import * as uuid from 'uuid/v4';
+
 
 export interface IExpenseData {
   id: string;
@@ -8,28 +11,26 @@ export interface IExpenseData {
 }
 
 
-const expenseData: IExpenseData[] = [
+export const expenseData: IExpenseData[] = [
   {
-    // id: uuid,
-    id: 'lo21212!!@@@1',
+    id: uuid(),
+    // id: 'lo21212!!@@@1',
     title: 'Vacation',
     amount: -300,
   },
   {
-    id: 'losda@#12',
+    id: uuid(),
     title: 'income',
     amount: +1200,
   },
   {
-    id: 'apa3@@@1122',
+    id: uuid(),
     title: 'Lunch',
     amount: -5,
   },
   {
-    id: 's231232100sa',
+    id: uuid(),
     title: 'cinema movie',
     amount: -8,
   },
 ];
-
-export default expenseData;

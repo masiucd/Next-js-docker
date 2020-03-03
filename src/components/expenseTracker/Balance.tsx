@@ -1,3 +1,5 @@
+/* eslint-disable import/extensions */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { StyleBalanceWrapper } from './Styled.Parts';
@@ -13,11 +15,8 @@ const Balance: React.FC<P> = ({ currentBalance }) => (
   <StyleBalanceWrapper>
     {' '}
     <h3>
-
       Balance:
-
       {currentBalance}
-
     </h3>
     {' '}
   </StyleBalanceWrapper>

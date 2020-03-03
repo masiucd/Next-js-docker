@@ -14,7 +14,9 @@ interface P {
 
 const List: React.FC<P> = ({ expenses }) => (
   <ListWrapper>
-    {expenses.map((x) => <ListItem key={x.id} item={x} />)}
+    {expenses.length > 0 ? expenses.map(
+      (x) => <ListItem key={x.id} item={x} />,
+    ) : <h3 className="no-items-msg">No Expenses , please add some</h3> }
     <ListFormWrapper>
       <ListForm />
     </ListFormWrapper>

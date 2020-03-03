@@ -13,7 +13,11 @@ export default (state: IExpenseState = initialState, action: ExpenseActionType) 
       return {
         ...state,
         transactions: action.payload,
-        // transactions: [...state.transactions, action.payload],
+      };
+    case ActionTypesIncome.DELETE_TRANSACTION:
+      return {
+        ...state,
+        transactions: state.transactions.filter((x) => x.id !== action.payload),
       };
     default:
       return state;

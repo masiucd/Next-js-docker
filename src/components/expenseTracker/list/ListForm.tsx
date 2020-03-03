@@ -24,11 +24,14 @@ const ListForm: React.FC<P> = () => {
   return (
     <StyledListForm>
       <label htmlFor="title">
+        <span>Title</span>
         <Input type="text" name="title" value={title} onChange={handleChange} />
       </label>
       <label htmlFor="amount">
+        <span>amount</span>
         <Input type="text" name="amount" value={amount} onChange={handleChange} />
       </label>
+      <button type="submit">Add Transaction</button>
     </StyledListForm>
   );
 };
