@@ -1,28 +1,44 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { StyledListForm, Input } from './Styles.List';
+import { addNewTransaction } from '../../../redux/expenseCalculator/expense.actions';
+
+const uuid = require('uuid/v4');
 
 interface P {
-
+  addNewTransaction: Function;
 }
 interface IFormData{
   title: string;
-  amount: number;
+  amount: string;
 }
 
-const ListForm: React.FC<P> = () => {
+const ListForm: React.FC<P> = ({ addNewTransaction }) => {
   const [formData, setFormData] = React.useState<IFormData>({
     title: '',
-    amount: 0,
+    amount: '',
   });
+  const { title, amount } = formData;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const { title, amount } = formData;
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (title.length > 0 && amount.length > 0) {
+      addNewTransaction({
+        id: uuid(),
+        title,
+        amount: Number(amount),
+      });
+      setFormData({ title: '', amount: '' });
+    }
+  };
+
   return (
-    <StyledListForm>
+    <StyledListForm onSubmit={handleSubmit}>
       <label htmlFor="title">
         <span>Title</span>
         <Input type="text" name="title" value={title} onChange={handleChange} />
@@ -35,4 +51,5 @@ const ListForm: React.FC<P> = () => {
     </StyledListForm>
   );
 };
-export default ListForm;
+
+export default connect(null, { addNewTransaction })(ListForm);

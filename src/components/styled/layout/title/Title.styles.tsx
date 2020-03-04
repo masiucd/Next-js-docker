@@ -3,15 +3,16 @@ import styled from 'styled-components';
 
 export const StyTitle = styled.section`
   padding: .5rem .8rem;
-  /* TODO:Remove */
-  border: 2px solid red;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items:center;
   margin: 2rem auto;
   width: 90%;
-
+  background: ${(props) => props.theme.colors.white};
+  color: ${(props) => props.theme.colors.primary};
+  border-radius: 1rem;
 `;
 
 export const StyH1 = styled.h1`

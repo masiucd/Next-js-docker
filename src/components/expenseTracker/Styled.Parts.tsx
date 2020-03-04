@@ -15,8 +15,9 @@ export const StyleIncomeExpWrapper = styled.div`
 
 export const StyleHeader = styled.div`
   display:flex;
-  /* TODO: DELETE */
-  border: 2px solid blue;
+  background: ${(props) => props.theme.colors.primary};
+  color: ${(props) => props.theme.colors.white};
+  border-radius: 1rem;
   align-items:center;
   /* flex-direction:column; */
   width: 100%;

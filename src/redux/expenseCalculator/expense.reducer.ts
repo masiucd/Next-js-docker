@@ -14,6 +14,21 @@ export default (state: IExpenseState = initialState, action: ExpenseActionType) 
         ...state,
         transactions: action.payload,
       };
+    case ActionTypesIncome.ADD_TRANSACTION:
+      return {
+        ...state,
+        transactions: [...state.transactions, action.payload],
+      };
+    case ActionTypesIncome.SET_CURRENT:
+      return {
+        ...state,
+        current: action.payload,
+      };
+    case ActionTypesIncome.CLEAR_CURRENT:
+      return {
+        ...state,
+        current: null,
+      };
     case ActionTypesIncome.DELETE_TRANSACTION:
       return {
         ...state,

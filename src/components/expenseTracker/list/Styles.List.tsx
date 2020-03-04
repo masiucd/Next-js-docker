@@ -93,7 +93,6 @@ export const StyledListItem = styled.section`
 
 export const ListFormWrapper = styled.div`
   ${Default};
-  border: 2px solid red;
   ${FlexStyles};
 
 `;
@@ -102,9 +101,12 @@ export const StyledListForm = styled.form`
   ${Default};
   ${FlexStyles};
   flex-direction: column;
-  border: 2px solid green;
+  border: 2px solid ${(props) => props.theme.colors.primary};
+  box-shadow: ${(props) => props.theme.shadow.lightShadow};
   width: 90%;
   label{
+    display: flex;
+    flex-direction: column;
     span{
       font-size: 1.2rem;
       text-transform: capitalize;
