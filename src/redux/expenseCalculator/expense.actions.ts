@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import {
-  ActionTypesIncome, GetTransactionAction, RemoveTransactionAction, AddNewTransactionAction, SetCurrentAction, ClearCurrentAction,
+  ActionTypesIncome, GetTransactionAction, RemoveTransactionAction, AddNewTransactionAction, SetCurrentAction, ClearCurrentAction, UpdateTransactionAction,
 } from './expense.types';
 import { expenseData, IExpenseData } from '../../utils/expenseData';
 
@@ -28,4 +28,9 @@ export const setCurrentTransaction = (current: IExpenseData): SetCurrentAction =
 
 export const clearCurrentTransaction = (): ClearCurrentAction => ({
   type: ActionTypesIncome.CLEAR_CURRENT,
+});
+
+export const updateTransaction = (formData: IExpenseData): UpdateTransactionAction => ({
+  type: ActionTypesIncome.UPDATE_TRANSACTION,
+  payload: formData,
 });

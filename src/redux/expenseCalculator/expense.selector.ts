@@ -25,7 +25,7 @@ export const selectCalculateBalance = createSelector(
 
 export const selectCalculateExpense = createSelector(
   [selectExpenseState],
-  (incomeState: IExpenseState) => incomeState.transactions.map(
+  (state: IExpenseState) => state.transactions.map(
     (x) => (x.amount < 0 ? x.amount : 0),
   ).reduce((acc, exp) => acc + exp, 0),
 );
@@ -33,7 +33,13 @@ export const selectCalculateExpense = createSelector(
 
 export const selectCalculateIncome = createSelector(
   [selectExpenseState],
-  (incomeState: IExpenseState) => incomeState.transactions.map(
+  (state: IExpenseState) => state.transactions.map(
     (x) => (x.amount > 0 ? x.amount : 0),
   ).reduce((acc, income) => acc + income, 0),
+);
+
+
+export const getCurrent = createSelector(
+  [selectExpenseState],
+  (state: IExpenseState) => state.current,
 );

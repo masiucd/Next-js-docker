@@ -146,3 +146,7 @@ export const Input = styled.input`
   }
 
 `;
+
+
+export const StyledEditForm = styled(StyledListForm)`
+`;

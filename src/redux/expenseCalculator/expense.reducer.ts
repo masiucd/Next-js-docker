@@ -29,6 +29,11 @@ export default (state: IExpenseState = initialState, action: ExpenseActionType) 
         ...state,
         current: null,
       };
+    case ActionTypesIncome.UPDATE_TRANSACTION:
+      return {
+        ...state,
+        transactions: state.transactions.map((x) => (x.id === state.current?.id ? action.payload : x)),
+      };
     case ActionTypesIncome.DELETE_TRANSACTION:
       return {
         ...state,
