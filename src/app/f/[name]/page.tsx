@@ -1,21 +1,9 @@
-import Link from "next/link";
+import {Suspense} from "react";
 
 import {Icons} from "@/lib/components/icons";
-import {getEmailsForFolder, getFoldersWithEmailCount} from "@/lib/db/queries";
-import {cn} from "@/lib/utils/cn";
+import {getEmailsForFolder} from "@/lib/db/queries";
 
-function TopFolderIcon({name}: {name: string}) {
-  switch (name) {
-    case "inbox":
-      return <Icons.Inbox size={14} />;
-    case "flagged":
-      return <Icons.Flag size={14} />;
-    case "sent":
-      return <Icons.Send size={14} />;
-    default:
-      return <Icons.Folder size={14} />;
-  }
-}
+import Folders from "./components/folders";
 
 export default async function EmailPage({
   params,
@@ -24,66 +12,16 @@ export default async function EmailPage({
   params: {name: string};
   searchParams: {[key: string]: string};
 }) {
-  let {topFolders, otherFolders} = await getFoldersWithEmailCount();
-
   return (
     <div className="grid flex-1  grid-cols-12 gap-4 border">
-      <div className="col-span-2 border border-primary-300 px-2 py-5">
-        {/* folders */}
-        <ul className="mb-10 flex flex-col gap-2">
-          {topFolders.map((folder) => {
-            return (
-              <li
-                key={folder.name}
-                className={cn(
-                  "capitalize",
-                  params.name === folder.name && "text-primary-300"
-                )}
-              >
-                <Link
-                  href={`/f/${folder.name}`}
-                  className="flex items-center justify-between gap-2 hover:text-primary-200 "
-                >
-                  <div className="flex items-center gap-2">
-                    {/* <Icons.Folder size={14} /> */}
-                    <TopFolderIcon name={folder.name.toLowerCase()} />
-
-                    <span>{folder.name}</span>
-                  </div>
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100">
-                    {folder.total}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-
-        <ul className="flex flex-col gap-2">
-          {otherFolders.map((folder) => {
-            return (
-              <li key={folder.name} className="capitalize">
-                <Link
-                  href={`/f/${folder.name}`}
-                  className="flex items-center justify-between gap-2 hover:text-primary-200 "
-                >
-                  <div className="flex items-center gap-2">
-                    <Icons.Folder size={14} /> <span>{folder.name}</span>
-                  </div>
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100">
-                    {folder.total}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="col-span-4 border border-primary-300 px-2 py-5">
+      <Folders params={params} />
+      <div className="col-span-4 flex flex-col border border-primary-300 px-2 py-5">
         <EmailList name={params.name} />
       </div>
-      <div className="col-span-6 border border-primary-300 px-2 py-5">
-        Selected email column
+      <div className="col-span-6 flex flex-col border border-primary-300">
+        <Suspense fallback={<div>No Email selected</div>}>
+          <SelectedEmail searchParams={searchParams} />
+        </Suspense>
       </div>
     </div>
   );
@@ -91,17 +29,65 @@ export default async function EmailPage({
 
 async function EmailList({name}: {name: string}) {
   let emails = await getEmailsForFolder(name);
+  if (emails.length === 0) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <h3 className="text-2xl font-bold capitalize tracking-tight text-primary-300">
+          no emails
+        </h3>
+      </div>
+    );
+  }
+  console.log(emails);
   return (
     <div>
       <ul className="flex flex-col gap-2">
-        {emails.map((email) => {
-          return (
-            <li key={email.id}>
-              <div>{email.subject}</div> <div>{email.body}</div>
-            </li>
-          );
-        })}
+        {emails.map((email) => (
+          <li key={email.id}>
+            <div>{email.subject}</div> <div>{email.body}</div>
+          </li>
+        ))}
       </ul>
     </div>
   );
+}
+
+function Toolbar() {
+  return (
+    <div className="flex gap-2 border px-2 py-4">
+      <button type="button" className="hover:opacity-50">
+        <Icons.Send size={18} />
+      </button>
+      <button type="button" className="hover:opacity-50">
+        <Icons.Trash size={18} />
+      </button>
+      <button type="button" className="hover:opacity-50">
+        <Icons.CornerUpLeft size={18} />
+      </button>
+      <button type="button" className="hover:opacity-50">
+        <Icons.CornerUpRight size={18} />
+      </button>
+    </div>
+  );
+}
+function EmptyEmailView() {
+  return (
+    <div className="flex flex-1 flex-col border">
+      <Toolbar />
+      <div className="flex  flex-1 items-center justify-center">
+        <h3 className="text-2xl font-bold capitalize tracking-tight text-primary-300">
+          no email selected
+        </h3>
+      </div>
+    </div>
+  );
+}
+
+function SelectedEmail({
+  searchParams,
+}: {
+  searchParams: {[key: string]: string};
+}) {
+  if (!searchParams.id) return <EmptyEmailView />;
+  return <div>Selected Email</div>;
 }

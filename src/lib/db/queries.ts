@@ -9,8 +9,8 @@ import {
 
 export async function getEmailsForFolder(name: string) {
   let nameTitleCase = toTitleCase(name);
-  let rows = await sql`
-                    SELECT e.id ,e.sender_id ,e.recipient_id ,e.subject ,e.body,e.sent_date , u.name, u.email
+  let rows =
+    await sql`SELECT e.id ,e.sender_id ,e.recipient_id ,e.subject ,e.body,e.sent_date , u.name, u.email
                     FROM emails e
                             JOIN email_folders ef ON e.id = ef.email_id
                             JOIN folders f ON ef.folder_id = f.id
@@ -22,8 +22,7 @@ export async function getEmailsForFolder(name: string) {
 }
 
 export async function getFoldersWithEmailCount() {
-  let rows = await sql`
-                    SELECT f.name, COUNT(ef.email_id) AS total
+  let rows = await sql`SELECT f.name, COUNT(ef.email_id) AS total
                     FROM folders f
                             LEFT JOIN email_folders ef ON f.id = ef.folder_id
                     GROUP BY f.name
@@ -46,6 +45,6 @@ export async function getFoldersWithEmailCount() {
 function toTitleCase(str: string) {
   return str.replace(
     /\w\S*/g,
-    (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
   );
 }
