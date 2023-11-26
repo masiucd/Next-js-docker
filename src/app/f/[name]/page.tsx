@@ -1,20 +1,23 @@
 import Link from "next/link";
-import {type PropsWithChildren} from "react";
 
 import {Icons} from "@/lib/components/icons";
 
-import Inbox from "./components/inbox";
-
-export default function Layout({children}: PropsWithChildren) {
+export default function EmailPage({
+  params,
+  searchParams,
+}: {
+  params: {name: string};
+  searchParams: {[key: string]: string};
+}) {
   return (
-    <main className="flex min-h-[100dvh] border">
-      <aside className="flex basis-[20vw] flex-col gap-10 border border-red-300 py-10 pl-3 pr-10 ">
+    <div className="grid flex-1  grid-cols-12 gap-4 border">
+      <div className="col-span-2 border border-primary-300 px-2 py-5">
         {/* actions */}
-        <ul className="flex flex-col gap-2">
+        <ul className="mb-10 flex flex-col gap-2">
           <li className="capitalize">
             <Link
-              href="/inbox"
-              className="flex items-center justify-between gap-2"
+              href="/f/inbox"
+              className="flex items-center justify-between gap-2 hover:text-primary-200 "
             >
               <div className="flex items-center gap-2">
                 <Icons.Inbox size={14} /> <span>Inbox</span>
@@ -26,8 +29,8 @@ export default function Layout({children}: PropsWithChildren) {
           </li>
           <li className=" capitalize">
             <Link
-              href="/flagged"
-              className="flex items-center justify-between gap-2"
+              href="/f/flagged"
+              className="flex items-center justify-between gap-2 hover:text-primary-200"
             >
               <div className="flex items-center gap-2">
                 <Icons.Flag size={14} /> <span>Flagged</span>
@@ -40,8 +43,8 @@ export default function Layout({children}: PropsWithChildren) {
 
           <li className=" capitalize">
             <Link
-              href="/sent"
-              className="flex items-center justify-between gap-2"
+              href="/f/sent"
+              className="flex items-center justify-between gap-2 hover:text-primary-200"
             >
               <div className="flex items-center gap-2">
                 <Icons.Send size={14} /> <span>Sent</span>
@@ -65,13 +68,14 @@ export default function Layout({children}: PropsWithChildren) {
             <Icons.Folder size={14} /> <span>archive</span>
           </li>
         </ul>
-      </aside>
-      <section className=" basis-[30vw] border border-red-300 py-5">
-        <Inbox />
-      </section>
-      <section className="flex basis-[50vw] border border-red-300">
-        {children}
-      </section>
-    </main>
+      </div>
+      <div className="col-span-4 border border-primary-300 px-2 py-5">
+        <p>{params.name}</p>
+        Email list column
+      </div>
+      <div className="col-span-6 border border-primary-300 px-2 py-5">
+        Selected email column
+      </div>
+    </div>
   );
 }
