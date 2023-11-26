@@ -12,7 +12,7 @@ const config: Config = {
     extend: {
       colors: {
         gray: colors.slate,
-        blue: colors.sky,
+        primary: colors.sky,
       },
     },
   },
