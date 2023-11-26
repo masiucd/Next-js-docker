@@ -53,7 +53,9 @@ export default function Layout({children}: PropsWithChildren) {
       <section className=" basis-[30vw] border border-red-300 py-5">
         <Inbox />
       </section>
-      <section className="flex basis-[50vw]">{children}</section>
+      <section className="flex basis-[50vw] border border-red-300">
+        {children}
+      </section>
     </main>
   );
 }
