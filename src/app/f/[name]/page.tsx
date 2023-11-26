@@ -1,7 +1,21 @@
 import Link from "next/link";
 
 import {Icons} from "@/lib/components/icons";
-import {sql} from "@/lib/db/clinet";
+import {getEmailsForFolder, getFoldersWithEmailCount} from "@/lib/db/queries";
+import {cn} from "@/lib/utils/cn";
+
+function TopFolderIcon({name}: {name: string}) {
+  switch (name) {
+    case "inbox":
+      return <Icons.Inbox size={14} />;
+    case "flagged":
+      return <Icons.Flag size={14} />;
+    case "sent":
+      return <Icons.Send size={14} />;
+    default:
+      return <Icons.Folder size={14} />;
+  }
+}
 
 export default async function EmailPage({
   params,
@@ -10,63 +24,59 @@ export default async function EmailPage({
   params: {name: string};
   searchParams: {[key: string]: string};
 }) {
+  let {topFolders, otherFolders} = await getFoldersWithEmailCount();
+
   return (
     <div className="grid flex-1  grid-cols-12 gap-4 border">
       <div className="col-span-2 border border-primary-300 px-2 py-5">
         {/* folders */}
         <ul className="mb-10 flex flex-col gap-2">
-          <li className="capitalize">
-            <Link
-              href="/f/inbox"
-              className="flex items-center justify-between gap-2 hover:text-primary-200 "
-            >
-              <div className="flex items-center gap-2">
-                <Icons.Inbox size={14} /> <span>Inbox</span>
-              </div>
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100">
-                4
-              </span>
-            </Link>
-          </li>
-          <li className=" capitalize">
-            <Link
-              href="/f/flagged"
-              className="flex items-center justify-between gap-2 hover:text-primary-200"
-            >
-              <div className="flex items-center gap-2">
-                <Icons.Flag size={14} /> <span>Flagged</span>
-              </div>
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100 opacity-50">
-                0
-              </span>
-            </Link>
-          </li>
+          {topFolders.map((folder) => {
+            return (
+              <li
+                key={folder.name}
+                className={cn(
+                  "capitalize",
+                  params.name === folder.name && "text-primary-300"
+                )}
+              >
+                <Link
+                  href={`/f/${folder.name}`}
+                  className="flex items-center justify-between gap-2 hover:text-primary-200 "
+                >
+                  <div className="flex items-center gap-2">
+                    {/* <Icons.Folder size={14} /> */}
+                    <TopFolderIcon name={folder.name.toLowerCase()} />
 
-          <li className=" capitalize">
-            <Link
-              href="/f/sent"
-              className="flex items-center justify-between gap-2 hover:text-primary-200"
-            >
-              <div className="flex items-center gap-2">
-                <Icons.Send size={14} /> <span>Sent</span>
-              </div>
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100">
-                2
-              </span>
-            </Link>
-          </li>
+                    <span>{folder.name}</span>
+                  </div>
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100">
+                    {folder.total}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
         <ul className="flex flex-col gap-2">
-          <li className="flex items-center gap-2 capitalize">
-            <Icons.Folder size={14} /> <span>work</span>
-          </li>
-          <li className="flex items-center gap-2 capitalize">
-            <Icons.Folder size={14} /> <span>personal</span>
-          </li>
-          <li className="flex items-center gap-2 capitalize">
-            <Icons.Folder size={14} /> <span>archive</span>
-          </li>
+          {otherFolders.map((folder) => {
+            return (
+              <li key={folder.name} className="capitalize">
+                <Link
+                  href={`/f/${folder.name}`}
+                  className="flex items-center justify-between gap-2 hover:text-primary-200 "
+                >
+                  <div className="flex items-center gap-2">
+                    <Icons.Folder size={14} /> <span>{folder.name}</span>
+                  </div>
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100">
+                    {folder.total}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="col-span-4 border border-primary-300 px-2 py-5">
@@ -77,19 +87,6 @@ export default async function EmailPage({
       </div>
     </div>
   );
-}
-
-async function getEmailsForFolder(name: string) {
-  let nameTitleCase = toTitleCase(name);
-  let rows = await sql`
-                    SELECT e.*, u.name, u.email
-                    FROM emails e
-                            JOIN email_folders ef ON e.id = ef.email_id
-                            JOIN folders f ON ef.folder_id = f.id
-                            JOIN users u ON e.recipient_id = u.id
-                    WHERE f.name = ${nameTitleCase}
-                    ORDER BY e.sent_date DESC`;
-  return rows;
 }
 
 async function EmailList({name}: {name: string}) {
@@ -106,12 +103,5 @@ async function EmailList({name}: {name: string}) {
         })}
       </ul>
     </div>
-  );
-}
-
-function toTitleCase(str: string) {
-  return str.replace(
-    /\w\S*/g,
-    (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
   );
 }
