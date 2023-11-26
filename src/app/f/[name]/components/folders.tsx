@@ -59,7 +59,13 @@ export default async function Folders({params}: Props) {
 
       <ul className="flex flex-col gap-2">
         {otherFolders.map((folder) => (
-          <li key={folder.name} className="capitalize">
+          <li
+            key={folder.name}
+            className={cn(
+              "capitalize",
+              params.name === folder.name && "text-primary-300"
+            )}
+          >
             <Link
               href={`/f/${folder.name}`}
               className="flex items-center justify-between gap-2 hover:text-primary-200 "
