@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {type PropsWithChildren} from "react";
 
 import {Icons} from "@/lib/components/icons";
@@ -10,30 +11,45 @@ export default function Layout({children}: PropsWithChildren) {
       <aside className="flex basis-[20vw] flex-col gap-10 border border-red-300 py-10 pl-3 pr-10 ">
         {/* actions */}
         <ul className="flex flex-col gap-2">
-          <li className="flex items-center justify-between gap-2 capitalize">
-            <div className="flex items-center gap-2">
-              <Icons.Inbox size={14} /> <span>Inbox</span>
-            </div>
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100">
-              4
-            </span>
+          <li className="capitalize">
+            <Link
+              href="/inbox"
+              className="flex items-center justify-between gap-2"
+            >
+              <div className="flex items-center gap-2">
+                <Icons.Inbox size={14} /> <span>Inbox</span>
+              </div>
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100">
+                4
+              </span>
+            </Link>
           </li>
-          <li className="flex items-center justify-between gap-2 capitalize">
-            <div className="flex items-center gap-2">
-              <Icons.Flag size={14} /> <span>Flagged</span>
-            </div>
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100 opacity-50">
-              0
-            </span>
+          <li className=" capitalize">
+            <Link
+              href="/flagged"
+              className="flex items-center justify-between gap-2"
+            >
+              <div className="flex items-center gap-2">
+                <Icons.Flag size={14} /> <span>Flagged</span>
+              </div>
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100 opacity-50">
+                0
+              </span>
+            </Link>
           </li>
 
-          <li className="flex items-center justify-between gap-2 capitalize">
-            <div className="flex items-center gap-2">
-              <Icons.Send size={14} /> <span>Sent</span>
-            </div>
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100">
-              2
-            </span>
+          <li className=" capitalize">
+            <Link
+              href="/sent"
+              className="flex items-center justify-between gap-2"
+            >
+              <div className="flex items-center gap-2">
+                <Icons.Send size={14} /> <span>Sent</span>
+              </div>
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-500 text-xs text-gray-100">
+                2
+              </span>
+            </Link>
           </li>
         </ul>
 
