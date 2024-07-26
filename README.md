@@ -15,3 +15,7 @@ docker-compose up -d # Run in detached mode
 ```bash
 docker-compose down
 ```
+
+### Env file
+
+The env file is included in the repository. You can change the values as needed.
