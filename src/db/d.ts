@@ -11,7 +11,7 @@ import {drizzle} from "drizzle-orm/postgres-js";
 // import {migrate} from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
 
-// import env from "@/env";
+import env from "@/env";
 
 export let users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -22,8 +22,7 @@ export let users = pgTable("users", {
 });
 
 export let connection = postgres(
-  // "jdbc:postgresql://localhost:5432/postgres"
-  "postgresql://admin:admin@localhost:5432/mydb"
+  env.DATABASE_URL
   // {
   //   max: env.DB_MIGRATING || env.DB_SEEDING ? 1 : undefined,
   //   onnotice: env.DB_SEEDING ? () => {} : undefined,
@@ -32,6 +31,7 @@ export let connection = postgres(
 
 export let db = drizzle(connection, {
   // schema: {users},
+  schema: {users},
   logger: true,
 });
 
