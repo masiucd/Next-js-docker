@@ -1,25 +1,8 @@
-import {
-  // integer,
-  // pgEnum,
-  pgTable,
-  serial,
-  timestamp,
-  // uniqueIndex,
-  varchar,
-} from "drizzle-orm/pg-core";
 import {drizzle} from "drizzle-orm/postgres-js";
 // import {migrate} from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
 
 import env from "@/env";
-
-export let users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", {length: 255}),
-  email: varchar("email", {length: 255}),
-  password: varchar("password", {length: 255}),
-  createdAt: timestamp("created_at").defaultNow(),
-});
 
 export let connection = postgres(
   env.DATABASE_URL
