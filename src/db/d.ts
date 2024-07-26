@@ -1,17 +1,40 @@
+import {
+  // integer,
+  // pgEnum,
+  pgTable,
+  serial,
+  timestamp,
+  // uniqueIndex,
+  varchar,
+} from "drizzle-orm/pg-core";
 import {drizzle} from "drizzle-orm/postgres-js";
-import {migrate} from "drizzle-orm/postgres-js/migrator";
+// import {migrate} from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
 
-// for migrations
-// const migrationClient = postgres(
-//   "postgres://postgres:adminadmin@0.0.0.0:5432/db",
-//   {max: 1}
-// );
+// import env from "@/env";
 
-// migrate(drizzle(migrationClient));
+export let users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", {length: 255}),
+  email: varchar("email", {length: 255}),
+  password: varchar("password", {length: 255}),
+  createdAt: timestamp("created_at").defaultNow(),
+});
 
-// TODO use env vars
-// for query purposes
-const queryClient = postgres("postgres://admin:admin@0.0.0.0:5432/mydb");
-const db = drizzle(queryClient);
-// await db.select().from()
+export let connection = postgres(
+  // "jdbc:postgresql://localhost:5432/postgres"
+  "postgresql://admin:admin@localhost:5432/mydb"
+  // {
+  //   max: env.DB_MIGRATING || env.DB_SEEDING ? 1 : undefined,
+  //   onnotice: env.DB_SEEDING ? () => {} : undefined,
+  // }
+);
+
+export let db = drizzle(connection, {
+  // schema: {users},
+  logger: true,
+});
+
+export type DB = typeof db;
+
+// export default db;

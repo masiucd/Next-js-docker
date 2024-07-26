@@ -1,18 +1,15 @@
-version: '3.8'
 services:
   db:
-    image: postgres:15
-    restart: always # restart the container if it fails
-    environment: # set environment variables
-      POSTGRES_USER: admin  # set the username
-      POSTGRES_PASSWORD: admin # set the password
-      POSTGRES_DB: mydb # set the database name
-    ports: # expose the port
-      - "5432:5432" # map the port from the container to the host
-    volumes: # mount the volume
-      - postgres_data:/var/lib/postgresql/data
-
-volumes: # create a volume
-  postgres_data: # name of the volume
-
-
+    image: postgres:16.2 # Use the latest version of Postgres
+    environment: # Set environment variables
+      - POSTGRES_PASSWORD=admin # Use the password you set in the .env file
+      - POSTGRES_USER=admin # Use the username you set in the .env file
+      - POSTGRES_DB=mydb # Use the database name you set in the .env file
+      # - POSTGRES_PASSWORD=${DB_PASSWORD} # Use the password you set in the .env file
+      # - POSTGRES_USER=${DB_USER} # Use the username you set in the .env file
+      # - POSTGRES_DB=${DB_NAME} # Use the database name you set in the .env file
+    ports: # Map the port from the container to the host
+      - 5432:5432
+      # - ${DB_PORT}:5432
+    volumes: # Mount the volume to persist the data
+      - ./db-data:/var/lib/postgresql/data
