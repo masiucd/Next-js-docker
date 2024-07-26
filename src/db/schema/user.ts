@@ -1,6 +1,9 @@
+import {relations} from "drizzle-orm";
 import {index, pgTable, serial, timestamp, varchar} from "drizzle-orm/pg-core";
 
-export let users = pgTable(
+import {task} from "./tasks";
+
+export let user = pgTable(
   "users",
   {
     id: serial("id").primaryKey(),
@@ -16,3 +19,7 @@ export let users = pgTable(
     };
   }
 );
+
+export const userRelations = relations(user, ({many}) => ({
+  tasks: many(task), // user has many tasks
+}));

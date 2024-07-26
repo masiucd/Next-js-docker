@@ -4,17 +4,16 @@ import postgres from "postgres";
 
 import env from "@/env";
 
-export let connection = postgres(
-  env.DATABASE_URL
-  // {
-  //   max: env.DB_MIGRATING || env.DB_SEEDING ? 1 : undefined,
-  //   onnotice: env.DB_SEEDING ? () => {} : undefined,
-  // }
-);
+import {tasks} from "./schema/tasks";
+import {users} from "./schema/user";
+
+export let connection = postgres(env.DATABASE_URL, {
+  max: env.DB_MIGRATING || env.DB_SEEDING ? 1 : undefined, // only allow one connection during migration
+  onnotice: env.DB_SEEDING ? () => {} : undefined, // ignore notices during seeding
+});
 
 export let db = drizzle(connection, {
-  // schema: {users},
-  schema: {users},
+  schema: {users, tasks},
   logger: true,
 });
 
