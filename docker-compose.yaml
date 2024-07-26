@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    restart: always # restart the container if it fails
+    environment: # set environment variables
+      POSTGRES_USER: admin  # set the username
+      POSTGRES_PASSWORD: admin # set the password
+      POSTGRES_DB: mydb # set the database name
+    ports: # expose the port
+      - "5432:5432" # map the port from the container to the host
+    volumes: # mount the volume
+      - postgres_data:/var/lib/postgresql/data
+
+volumes: # create a volume
+  postgres_data: # name of the volume
+
+
