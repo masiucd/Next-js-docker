@@ -4,6 +4,11 @@ This is a simple project to demonstrate how to use Next.js with Docker and Postg
 We are using a docker-compose file to run the Next.js app and Postgres database.
 This make it easy to run the app in any environment.
 
+### Description
+
+A simple _CRUD_ app with Next.js and Postgres.
+Where users have their own tasks and can create, read, update and delete them.
+
 ### Run docker compose
 
 ```bash
