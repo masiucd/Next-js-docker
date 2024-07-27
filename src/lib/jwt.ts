@@ -1,6 +1,7 @@
 "use server";
 import "server-only";
 
+import {parseISO} from "date-fns";
 import {jwtVerify, SignJWT} from "jose";
 import {z} from "zod";
 
@@ -10,15 +11,17 @@ let key = new TextEncoder().encode(secretKey);
 let payloadSchema = z.object({
   userId: z.number(),
   email: z.string(),
-  expires: z.date(),
+  expires: z.string(),
 });
 export type Payload = z.infer<typeof payloadSchema>;
 
 export async function encrypt(payload: Payload) {
+  console.log("payload", payload);
+  console.log("parseISO(payload.expires)", parseISO(payload.expires));
   return await new SignJWT(payloadSchema.parse(payload))
     .setProtectedHeader({alg: "HS256"})
     .setIssuedAt()
-    .setExpirationTime(payload.expires)
+    .setExpirationTime(parseISO(payload.expires))
     .sign(key);
 }
 
@@ -26,5 +29,5 @@ export async function decrypt(input: string) {
   let {payload} = await jwtVerify(input, key, {
     algorithms: ["HS256"],
   });
-  return payload;
+  return payloadSchema.parse(payload);
 }
