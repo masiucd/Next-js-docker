@@ -1,10 +1,10 @@
+import {config} from "dotenv";
+import {expand} from "dotenv-expand";
 import {z, ZodError} from "zod";
 
 const stringBoolean = z.coerce
   .string()
-  .transform((val) => {
-    return val === "true";
-  })
+  .transform((val) => val === "true")
   .default("false");
 
 let EnvSchema = z.object({
@@ -21,6 +21,9 @@ let EnvSchema = z.object({
 
 export type EnvSchemaType = z.infer<typeof EnvSchema>;
 
+// expand variables in .env so that they can be coerced
+expand(config());
+
 try {
   EnvSchema.parse(process.env);
 } catch (error) {
@@ -33,6 +36,7 @@ try {
     e.stack = "";
     throw e;
   } else {
+    // eslint-disable-next-line no-console
     console.error(error);
   }
 }
