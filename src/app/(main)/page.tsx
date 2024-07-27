@@ -1,11 +1,15 @@
 import {Box, Button, TextField} from "@radix-ui/themes";
 import {verify} from "argon2";
+import {format} from "date-fns";
 import {eq} from "drizzle-orm";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 
+import {PageWrapper} from "@/_components/page-wrapper";
+import {H1, Label, Span} from "@/_components/typography";
 import {db} from "@/db";
 import {user} from "@/db/schema";
+import {isAuthorized} from "@/lib/auth";
 import {encrypt} from "@/lib/jwt";
 import {getExpires} from "@/lib/session";
 
@@ -37,41 +41,40 @@ async function login(data: FormData) {
     value: await encrypt({
       userId: userFields.userId,
       email: userFields.email,
-      expires,
+      expires: format(expires, "yyyy-MM-dd'T'HH:mm:ssxxx"),
     }),
     expires,
   });
 
-  redirect("/progile");
+  redirect("/profile");
 }
 
 export default async function Home() {
-  // let xs = await db
-  //   .select({
-  //     id: user.id,
-  //     name: user.name,
-  //     task: {
-  //       title: task.task,
-  //       completed: task.completed,
-  //     },
-  //   })
-  //   .from(user)
-  //   .leftJoin(task, eq(user.id, task.userId));
-  // // .where(eq(user.id, 1));
-  // console.log("xs", xs);
-
+  let authorized = await isAuthorized();
+  if (authorized) {
+    redirect("/profile");
+  }
   return (
-    <>
-      <Box className="max-w-10">
+    <PageWrapper>
+      <Box width="400px">
+        <H1>Sign in</H1>
         <form action={login}>
-          <fieldset>
-            <TextField.Root type="password" name="email" required />
-            <TextField.Root type="password" name="password" required />
-            <Button type="submit">Login</Button>
+          <fieldset className="flex flex-col gap-2">
+            <Box>
+              <Label htmlFor="email">Email</Label>
+              <TextField.Root type="email" name="email" required />
+            </Box>
+            <Box>
+              <Label htmlFor="password">Password</Label>
+              <TextField.Root type="password" name="password" required />
+            </Box>
+            <Button type="submit">
+              <Span weight="medium">Sign in</Span>
+            </Button>
           </fieldset>
         </form>
       </Box>
-    </>
+    </PageWrapper>
   );
 }
 
