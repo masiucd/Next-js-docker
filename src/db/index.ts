@@ -15,5 +15,3 @@ export let db = drizzle(connection, {
 });
 
 export type DB = typeof db;
-
-// export default db;
