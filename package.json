@@ -8,10 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "cross-env DB_MIGRATING=true tsx src/db/migrate.ts",
-    "db:seed": "cross-env DB_SEEDING=true tsx src/db/seed.ts"
+    "db:migrate": "cross-env-shell DB_MIGRATING=true tsx src/db/migrate.ts",
+    "db:seed": "cross-env-shell DB_SEEDING=true tsx src/db/seed.ts",
+    "test": "cross-env-shell NODE_ENV=development \"echo $NODE_ENV\""
   },
   "dependencies": {
+    "argon2": "^0.40.3",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
