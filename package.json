@@ -10,7 +10,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "cross-env-shell DB_MIGRATING=true tsx src/db/migrate.ts",
     "db:seed": "cross-env-shell DB_SEEDING=true tsx src/db/seed.ts",
-    "test": "cross-env-shell NODE_ENV=development \"echo $NODE_ENV\""
+    "db:studio": "bunx drizzle-kit studio"
   },
   "dependencies": {
     "@radix-ui/themes": "^3.1.1",
