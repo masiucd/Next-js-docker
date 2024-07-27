@@ -5,12 +5,12 @@ import {cookies} from "next/headers";
 
 import {decrypt} from "./jwt";
 
-export async function isAuthorized() {
+export async function getUserFromSession() {
   let cookieStore = cookies();
   let session = cookieStore.get("session");
   if (session) {
-    let {expires} = await decrypt(session.value);
-    if (expires && parseISO(expires) > new Date()) return true;
+    let data = await decrypt(session.value);
+    if (data.expires && parseISO(data.expires) > new Date()) return data;
   }
-  return false;
+  return null;
 }

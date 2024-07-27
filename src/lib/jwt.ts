@@ -16,8 +16,6 @@ let payloadSchema = z.object({
 export type Payload = z.infer<typeof payloadSchema>;
 
 export async function encrypt(payload: Payload) {
-  console.log("payload", payload);
-  console.log("parseISO(payload.expires)", parseISO(payload.expires));
   return await new SignJWT(payloadSchema.parse(payload))
     .setProtectedHeader({alg: "HS256"})
     .setIssuedAt()

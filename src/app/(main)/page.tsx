@@ -1,6 +1,6 @@
 import {Box, Button, TextField} from "@radix-ui/themes";
 import {verify} from "argon2";
-import {format} from "date-fns";
+import {format, isBefore, parseISO} from "date-fns";
 import {eq} from "drizzle-orm";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
@@ -9,7 +9,7 @@ import {PageWrapper} from "@/_components/page-wrapper";
 import {H1, Label, Span} from "@/_components/typography";
 import {db} from "@/db";
 import {user} from "@/db/schema";
-import {isAuthorized} from "@/lib/auth";
+import {getUserFromSession} from "@/lib/auth";
 import {encrypt} from "@/lib/jwt";
 import {getExpires} from "@/lib/session";
 
@@ -50,10 +50,14 @@ async function login(data: FormData) {
 }
 
 export default async function Home() {
-  let authorized = await isAuthorized();
-  if (authorized) {
+  let userFromSession = await getUserFromSession();
+  if (
+    userFromSession !== null &&
+    isBefore(parseISO(userFromSession.expires), new Date())
+  ) {
     redirect("/profile");
   }
+
   return (
     <PageWrapper>
       <Box width="400px">
