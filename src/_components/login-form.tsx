@@ -23,12 +23,12 @@ type Props = {
     message: string;
   } | null>;
 };
+
 export function LoginForm({login}: Props) {
   let [state, action] = useFormState(login, null, "");
   if (state?.ok) {
     redirect("/profile");
   }
-  console.log("state", state);
   return (
     <Box>
       <form action={action}>
@@ -62,14 +62,18 @@ export function LoginForm({login}: Props) {
           </fieldset>
         </Flex>
       </form>
-      {state !== null && !state.ok && (
-        <Callout.Root color="red" mt="3" className="animate-bounce">
-          <Callout.Icon>
-            <Icons.Info size={ICON_SIZE} />
-          </Callout.Icon>
-          <Callout.Text>{state.message}</Callout.Text>
-        </Callout.Root>
-      )}
+      {state !== null && !state.ok && <Message message={state.message} />}
     </Box>
+  );
+}
+
+function Message({message}: {message: string}) {
+  return (
+    <Callout.Root color="red" mt="3" className="animate-bounce">
+      <Callout.Icon>
+        <Icons.Info size={ICON_SIZE} />
+      </Callout.Icon>
+      <Callout.Text>{message}</Callout.Text>
+    </Callout.Root>
   );
 }

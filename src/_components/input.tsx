@@ -4,7 +4,7 @@ import type {RootProps} from "@radix-ui/themes/src/components/text-field.jsx";
 import {Label, type LabelProps} from "./typography";
 
 export function Input(props: RootProps) {
-  return <TextField.Root size="2" {...props} />;
+  return <TextField.Root type="text" size="3" {...props} />;
 }
 
 export function InputGroup(props: BoxProps) {

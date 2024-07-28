@@ -1,3 +1,4 @@
+import {relations} from "drizzle-orm";
 import {boolean, integer, pgTable, serial, varchar} from "drizzle-orm/pg-core";
 
 import {user} from "./user";
@@ -9,4 +10,10 @@ export let task = pgTable("tasks", {
   userId: integer("user_id")
     .references(() => user.id)
     .notNull(),
+});
+
+export let taskRelations = relations(task, ({one}) => {
+  return {
+    user: one(user),
+  };
 });

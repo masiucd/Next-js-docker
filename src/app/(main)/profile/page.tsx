@@ -1,16 +1,27 @@
-import {Badge, Code, DataList, Flex, IconButton} from "@radix-ui/themes";
+import {
+  Badge,
+  Button,
+  Code,
+  DataList,
+  Flex,
+  IconButton,
+} from "@radix-ui/themes";
 import Link from "next/link";
 import {redirect} from "next/navigation";
 
 import {ICON_SIZE, Icons} from "@/_components/icons";
+import {Input, InputGroup, InputLabel} from "@/_components/input";
 import {PageWrapper} from "@/_components/page-wrapper";
-import {H1} from "@/_components/typography";
+import {H1, H3, Lead} from "@/_components/typography";
 import {getUserFromSession} from "@/lib/auth";
+import {sleep} from "@/lib/sleep";
 
+import {createTask} from "./actions";
 import {getUserData, type UserDataType} from "./api";
 import {UserTasks} from "./user-tasks";
 
 async function ProfilePage() {
+  await sleep(2000);
   let userFromSession = await getUserFromSession();
   if (userFromSession === null) {
     redirect("/");
@@ -20,7 +31,12 @@ async function ProfilePage() {
 
   return (
     <PageWrapper>
-      <H1>Profile</H1>
+      <Flex asChild direction="column" gap="2" mb="5">
+        <aside>
+          <H1>Profile</H1>
+          <Lead>Welcome</Lead>
+        </aside>
+      </Flex>
       <Flex
         gap="8"
         direction="column"
@@ -30,7 +46,7 @@ async function ProfilePage() {
       >
         <Flex>
           <UserData userData={profileData} />
-          <CreateNewTask />
+          <CreateNewTask userId={profileData.id} />
         </Flex>
         <UserTasks tasks={tasks} />
       </Flex>
@@ -38,8 +54,26 @@ async function ProfilePage() {
   );
 }
 
-function CreateNewTask() {
-  return <form action=""></form>;
+function CreateNewTask({userId}: {userId: number}) {
+  return (
+    <Flex direction="column">
+      <H3>Create new task</H3>
+      <Flex asChild align="center">
+        <form action={createTask}>
+          <Input
+            name="task"
+            placeholder="Your task..."
+            radius="none"
+            required
+          />
+          <input type="hidden" name="userId" value={userId} />
+          <Button type="submit" size="3" radius="none">
+            <Icons.Add size={ICON_SIZE} /> Create
+          </Button>
+        </form>
+      </Flex>
+    </Flex>
+  );
 }
 
 function UserData({userData}: {userData: UserDataType}) {
