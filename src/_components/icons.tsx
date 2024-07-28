@@ -1,9 +1,10 @@
-import {Clock, Copy, Delete, Edit} from "lucide-react";
+import {Clock, Copy, Delete, Edit, Info} from "lucide-react";
 
 export let Icons = Object.freeze({
   Copy,
   Delete,
   Edit,
+  Info,
   Snooze: Clock,
 });
 
