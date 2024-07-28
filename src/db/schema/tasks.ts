@@ -5,7 +5,7 @@ import {user} from "./user";
 export let task = pgTable("tasks", {
   id: serial("id").primaryKey(),
   task: varchar("task", {length: 255}).notNull(),
-  completed: boolean("completed").default(false),
+  completed: boolean("completed").default(false).notNull(),
   userId: integer("user_id")
     .references(() => user.id)
     .notNull(),
