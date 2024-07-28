@@ -5,6 +5,9 @@ import {
   type TextProps,
 } from "@radix-ui/themes";
 
+export type {TextProps as LabelProps};
+export type {TextProps as ParagraphProps};
+
 export function H1(props: HeadingProps) {
   return <Heading size="9" {...props} as="h1" />;
 }
