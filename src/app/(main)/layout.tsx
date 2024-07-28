@@ -14,7 +14,7 @@ export default function MainLayout({
   return (
     <>
       <Header />
-      <main className="flex min-h-[calc(100dvh-10rem)] flex-col">
+      <main className="my-5 flex min-h-[calc(100dvh-12rem)] flex-col">
         {children}
       </main>
       <Footer />
@@ -25,8 +25,8 @@ export default function MainLayout({
 async function Header() {
   let userFromSession = await getUserFromSession();
   return (
-    <header>
-      <Flex height="5rem" className="mx-auto w-app-width border border-red-600">
+    <header className="bg-gray-100 shadow">
+      <Flex height="5rem" className="mx-auto w-app-width" align="center">
         <Strong>Docker Next-JS</Strong>
         {userFromSession ? (
           <form
@@ -47,8 +47,8 @@ async function Header() {
 
 function Footer() {
   return (
-    <footer>
-      <Flex height="5rem" className="mx-auto w-app-width border border-red-600">
+    <footer className="bg-gray-100 shadow">
+      <Flex height="5rem" className="mx-auto w-app-width" align="center">
         <P asChild size="2">
           <small>© {new Date().getFullYear()} Docker Next-JS</small>
         </P>
