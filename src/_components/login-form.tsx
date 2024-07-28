@@ -1,7 +1,9 @@
 "use client";
-import {Box, Button, Callout} from "@radix-ui/themes";
+import {Box, Button, Callout, Flex} from "@radix-ui/themes";
 import {redirect} from "next/navigation";
 import {useFormState} from "react-dom";
+
+import {cn} from "@/lib/cn";
 
 import {ICON_SIZE, Icons} from "./icons";
 import {Input, InputGroup, InputLabel} from "./input";
@@ -26,41 +28,46 @@ export function LoginForm({login}: Props) {
   if (state?.ok) {
     redirect("/profile");
   }
+  console.log("state", state);
   return (
     <Box>
       <form action={action}>
-        <fieldset className="flex flex-col gap-2">
-          <InputGroup>
-            <InputLabel htmlFor="email">Email</InputLabel>
-            <Input
-              type="email"
-              name="email"
-              required
-              placeholder="name@ex.com"
-              size="3"
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              type="password"
-              name="password"
-              required
-              placeholder="secret password..."
-              size="3"
-            />
-          </InputGroup>
-          <Button type="submit" size="3">
-            <Span weight="bold">Sign in</Span>
-          </Button>
-        </fieldset>
+        <Flex asChild direction="column" gap="2">
+          <fieldset>
+            <InputGroup>
+              <InputLabel htmlFor="email">Email</InputLabel>
+              <Input
+                type="email"
+                name="email"
+                required
+                placeholder="name@ex.com"
+                size="3"
+                className={cn(state && !state.ok && "border border-red-500")}
+              />
+            </InputGroup>
+            <InputGroup>
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <Input
+                type="password"
+                name="password"
+                required
+                placeholder="secret password..."
+                size="3"
+                className={cn(state && !state.ok && "border border-red-500")}
+              />
+            </InputGroup>
+            <Button type="submit" size="3">
+              <Span weight="bold">Sign in</Span>
+            </Button>
+          </fieldset>
+        </Flex>
       </form>
       {state !== null && !state.ok && (
-        <Callout.Root color="red">
-          <Callout.Text>{state.message}</Callout.Text>
+        <Callout.Root color="red" mt="3" className="animate-bounce">
           <Callout.Icon>
             <Icons.Info size={ICON_SIZE} />
           </Callout.Icon>
+          <Callout.Text>{state.message}</Callout.Text>
         </Callout.Root>
       )}
     </Box>

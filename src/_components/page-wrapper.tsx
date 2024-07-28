@@ -1,3 +1,4 @@
+import {Flex} from "@radix-ui/themes";
 import type {PropsWithChildren} from "react";
 
 import {cn} from "@/lib/cn";
@@ -13,14 +14,13 @@ export function PageWrapper({
   fluid,
 }: PropsWithChildren<Props>) {
   return (
-    <section
-      className={cn(
-        "mx-auto w-full flex flex-col flex-1",
-        fluid ? "max-w-none" : "w-app-width",
-        className
-      )}
+    <Flex
+      asChild
+      direction="column"
+      flexGrow="1"
+      className={cn("mx-auto", fluid ? "w-full" : "w-app-width", className)}
     >
-      {children}
-    </section>
+      <section>{children}</section>
+    </Flex>
   );
 }

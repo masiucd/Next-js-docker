@@ -28,11 +28,18 @@ async function ProfilePage() {
         className="mx-auto w-[62rem] border border-blue-400"
         justify="between"
       >
-        <UserData userData={profileData} />
+        <Flex>
+          <UserData userData={profileData} />
+          <CreateNewTask />
+        </Flex>
         <UserTasks tasks={tasks} />
       </Flex>
     </PageWrapper>
   );
+}
+
+function CreateNewTask() {
+  return <form action=""></form>;
 }
 
 function UserData({userData}: {userData: UserDataType}) {

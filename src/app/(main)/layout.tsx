@@ -3,6 +3,7 @@ import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 import type {ReactNode} from "react";
 
+import {P, Strong} from "@/_components/typography";
 import {getUserFromSession} from "@/lib/auth";
 
 export default function MainLayout({
@@ -16,9 +17,7 @@ export default function MainLayout({
       <main className="flex min-h-[calc(100dvh-10rem)] flex-col">
         {children}
       </main>
-      <footer>
-        <Flex height="5rem" className="border border-red-500"></Flex>
-      </footer>
+      <Footer />
     </>
   );
 }
@@ -27,7 +26,8 @@ async function Header() {
   let userFromSession = await getUserFromSession();
   return (
     <header>
-      <Flex height="5rem" className="border border-red-500">
+      <Flex height="5rem" className="mx-auto w-app-width border border-red-600">
+        <Strong>Docker Next-JS</Strong>
         {userFromSession ? (
           <form
             action={async () => {
@@ -42,5 +42,17 @@ async function Header() {
         ) : null}
       </Flex>
     </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer>
+      <Flex height="5rem" className="mx-auto w-app-width border border-red-600">
+        <P asChild size="2">
+          <small>© {new Date().getFullYear()} Docker Next-JS</small>
+        </P>
+      </Flex>
+    </footer>
   );
 }

@@ -1,52 +1,37 @@
-import {Box, Button, TextField} from "@radix-ui/themes";
-import {verify} from "argon2";
-import {format, isBefore, parseISO} from "date-fns";
-import {eq} from "drizzle-orm";
-import {cookies} from "next/headers";
+import {Box, Flex, Separator} from "@radix-ui/themes";
+import {isBefore, parseISO} from "date-fns";
 import {redirect} from "next/navigation";
 
+import {LoginForm} from "@/_components/login-form";
 import {PageWrapper} from "@/_components/page-wrapper";
-import {H1, Label, Span} from "@/_components/typography";
-import {db} from "@/db";
-import {user} from "@/db/schema";
+import {H1, Lead} from "@/_components/typography";
 import {getUserFromSession} from "@/lib/auth";
-import {encrypt} from "@/lib/jwt";
-import {getExpires} from "@/lib/session";
+import {verifyPassword} from "@/lib/password";
+import {setAuthSession} from "@/lib/session";
 
-async function login(data: FormData) {
+import {getUser} from "./api";
+
+async function login(
+  prevState: null | {ok: boolean; message: string},
+  data: FormData
+) {
   "use server";
   let email = data.get("email");
   let password = data.get("password");
   if (typeof email !== "string" || typeof password !== "string") {
     throw new Error("Invalid form data");
   }
-  let userInDb = await db
-    .select({userId: user.id, password: user.password, email: user.email})
-    .from(user)
-    .where(eq(user.email, email));
-
+  let userInDb = await getUser(email);
   if (!userInDb) {
-    throw new Error("User not found");
+    return {ok: false, message: "Wrong email or password"};
   }
-  let userFields = userInDb[0];
-  let isValidPassword = await verify(userFields.password, password);
-  if (!isValidPassword) {
-    throw new Error("Invalid password");
-  }
-  let expires = getExpires();
-  let cookieStore = cookies();
-  // let foo = await encrypt({email:userInDb[].email},expires)
-  cookieStore.set({
-    name: "session",
-    value: await encrypt({
-      userId: userFields.userId,
-      email: userFields.email,
-      expires: format(expires, "yyyy-MM-dd'T'HH:mm:ssxxx"),
-    }),
-    expires,
-  });
 
-  redirect("/profile");
+  let isValidPassword = await verifyPassword(userInDb.password, password);
+  if (!isValidPassword) {
+    return {ok: false, message: "Wrong email or password"};
+  }
+  await setAuthSession(userInDb);
+  return {ok: true, message: "Success"};
 }
 
 export default async function Home() {
@@ -60,43 +45,16 @@ export default async function Home() {
 
   return (
     <PageWrapper>
-      <Box width="400px">
-        <H1>Sign in</H1>
-        <form action={login}>
-          <fieldset className="flex flex-col gap-2">
-            <Box>
-              <Label htmlFor="email">Email</Label>
-              <TextField.Root type="email" name="email" required />
-            </Box>
-            <Box>
-              <Label htmlFor="password">Password</Label>
-              <TextField.Root type="password" name="password" required />
-            </Box>
-            <Button type="submit">
-              <Span weight="medium">Sign in</Span>
-            </Button>
-          </fieldset>
-        </form>
+      <Box width="420px">
+        <Flex asChild direction="column" gap="2">
+          <section>
+            <H1>Log in</H1>
+            <Lead>Log in to view you tasks</Lead>
+          </section>
+        </Flex>
+        <Separator my="5" size="3" className="w-full" />
+        <LoginForm login={login} />
       </Box>
     </PageWrapper>
   );
 }
-
-// let foodRecordsStatement = await db
-// .selectDistinct({
-//   foodId: f.foodId,
-//   foodName: f.name,
-//   lowerName: sql`lower(${f.name})`,
-//   description: f.description,
-//   calories: fn.calories,
-//   carbs: fn.carbohydrates,
-//   totalFat: fn.fat,
-//   protein: fn.protein,
-//   foodType: dt.name,
-//   foodTypeId: dt.id,
-// })
-// .from(f)
-// .leftJoin(fn, eq(f.foodId, fn.foodId))
-// .leftJoin(dt, eq(f.type_id, dt.id))
-// .where(eq(f.foodId, foodID))
-// .get();

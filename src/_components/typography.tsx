@@ -1,6 +1,8 @@
 import {
   Heading,
   type HeadingProps,
+  Strong as RadixStrong,
+  type StrongProps,
   Text,
   type TextProps,
 } from "@radix-ui/themes";
@@ -44,4 +46,7 @@ export function Muted(props: TextProps) {
 
 export function Lead(props: TextProps) {
   return <Text color="gray" as="p" size="6" {...props} />;
+}
+export function Strong(props: StrongProps) {
+  return <RadixStrong {...props} />;
 }
