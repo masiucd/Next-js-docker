@@ -1,5 +1,5 @@
 {
-  "id": "d1ff4e70-944e-41d1-8224-7a151abf1255",
+  "id": "fd4db1c6-7995-4b51-8829-54e6afc89c52",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -24,7 +24,7 @@
           "name": "completed",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": false
         },
         "user_id": {
@@ -34,7 +34,23 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "task_idx": {
+          "name": "task_idx",
+          "columns": [
+            {
+              "expression": "task",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "tasks_user_id_users_id_fk": {
           "name": "tasks_user_id_users_id_fk",
@@ -90,8 +106,8 @@
         }
       },
       "indexes": {
-        "name_idx": {
-          "name": "name_idx",
+        "user_name_idx": {
+          "name": "user_name_idx",
           "columns": [
             {
               "expression": "name",
