@@ -2,12 +2,13 @@
 
 import {
   Button,
+  Dialog as RadixDialog,
   Flex,
   Popover as RadixPopOver,
   Radio,
   Tooltip,
 } from "@radix-ui/themes";
-import {type ReactNode, useState} from "react";
+import {type PropsWithChildren, type ReactNode, useState} from "react";
 
 import {ICON_SIZE, Icons} from "@/_components/icons";
 import {Label, P} from "@/_components/typography";
@@ -48,15 +49,22 @@ function TaskActions({selectedTask}: {selectedTask: string | null}) {
     <Flex align="start" direction="column" gap="4">
       <Flex>
         <Tooltip content="Edit">
-          <Button
-            // value={selectedTask}
-            name="edit"
-            radius="none"
-            variant="outline"
-            disabled={!enabled}
+          <Dialog
+            buttonComponent={
+              <Button
+                name="edit"
+                radius="none"
+                variant="outline"
+                disabled={!enabled}
+              >
+                <Icons.Edit size={ICON_SIZE} /> Edit
+              </Button>
+            }
+            title="Edit task"
+            description="Edit the task description"
           >
-            <Icons.Edit size={ICON_SIZE} /> Edit
-          </Button>
+            <h1>hello</h1>
+          </Dialog>
         </Tooltip>
         <Tooltip content="Delete">
           <PopOver
@@ -87,7 +95,6 @@ function TaskActions({selectedTask}: {selectedTask: string | null}) {
         </Tooltip>
         <Tooltip content="Snooze">
           <Button
-            // value={selectedTask}
             name="snooze"
             radius="none"
             variant="outline"
@@ -128,5 +135,27 @@ function PopOver({
         </Flex>
       </RadixPopOver.Content>
     </RadixPopOver.Root>
+  );
+}
+
+type Props = {
+  buttonComponent: ReactNode;
+  title: string;
+  description: string;
+};
+function Dialog(props: PropsWithChildren<Props>) {
+  return (
+    <RadixDialog.Root>
+      <RadixDialog.Trigger>{props.buttonComponent}</RadixDialog.Trigger>
+
+      <RadixDialog.Content maxWidth="450px">
+        <RadixDialog.Title>{props.title}</RadixDialog.Title>
+        <RadixDialog.Description size="2" mb="4">
+          {props.description}
+        </RadixDialog.Description>
+
+        {props.children}
+      </RadixDialog.Content>
+    </RadixDialog.Root>
   );
 }

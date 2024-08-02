@@ -86,6 +86,7 @@ function UserData({userData}: {userData: UserDataType}) {
                 aria-label="Copy value"
                 color="gray"
                 variant="ghost"
+                // TODO: Implement copy to clipboard
               >
                 <Icons.Copy size={ICON_SIZE} />
               </IconButton>
