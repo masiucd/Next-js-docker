@@ -8,16 +8,16 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import {user} from "./user";
+import {usersTable} from "./user";
 
-export let task = pgTable(
+export let tasksTable = pgTable(
   "tasks",
   {
-    id: serial("id").primaryKey(),
+    id: serial("id").primaryKey().notNull(),
     task: varchar("task", {length: 255}).notNull(),
     completed: boolean("completed").default(false).notNull(),
     userId: integer("user_id")
-      .references(() => user.id)
+      .references(() => usersTable.id)
       .notNull(),
   },
   (table) => ({
@@ -25,9 +25,9 @@ export let task = pgTable(
   })
 );
 
-export let taskRelations = relations(task, ({one}) => ({
-  user: one(user, {
-    fields: [task.userId],
-    references: [user.id],
+export let taskRelations = relations(tasksTable, ({one}) => ({
+  user: one(usersTable, {
+    fields: [tasksTable.userId],
+    references: [usersTable.id],
   }),
 }));

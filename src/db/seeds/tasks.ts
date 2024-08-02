@@ -4,27 +4,22 @@ import type {DB} from "..";
 
 let tasks = [
   {
-    id: 1,
     task: "Walk the dog",
     userId: 1,
   },
   {
-    id: 2,
     task: "Buy groceries",
     userId: 2,
   },
   {
-    id: 3,
     task: "Do laundry",
     userId: 3,
   },
   {
-    id: 4,
     task: "Wash dishes",
     userId: 1,
   },
   {
-    id: 5,
     task: "Mow the lawn",
     userId: 3,
   },
@@ -33,7 +28,7 @@ let tasks = [
 export async function seed(db: DB) {
   for (let task of tasks) {
     await db
-      .insert(schema.task)
+      .insert(schema.tasksTable)
       .values({
         ...task,
         completed: false,

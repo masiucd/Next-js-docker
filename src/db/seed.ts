@@ -11,7 +11,7 @@ if (!env.DB_SEEDING) {
   throw new Error("DB_SEEDING is not set to true");
 }
 
-for (let table of [schema.user, schema.task]) {
+for (let table of [schema.usersTable, schema.tasksTable]) {
   (async () => {
     // db.delete(table).execute(); // This will delete the whole table
     await resetTable(db, table);

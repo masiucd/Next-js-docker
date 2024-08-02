@@ -10,7 +10,7 @@ import Link from "next/link";
 import {redirect} from "next/navigation";
 
 import {ICON_SIZE, Icons} from "@/_components/icons";
-import {Input, InputGroup, InputLabel} from "@/_components/input";
+import {Input} from "@/_components/input";
 import {PageWrapper} from "@/_components/page-wrapper";
 import {H1, H3, Lead} from "@/_components/typography";
 import {getUserFromSession} from "@/lib/auth";
@@ -60,14 +60,9 @@ function CreateNewTask({userId}: {userId: number}) {
       <H3>Create new task</H3>
       <Flex asChild align="center">
         <form action={createTask}>
-          <Input
-            name="task"
-            placeholder="Your task..."
-            radius="none"
-            required
-          />
+          <Input name="task" placeholder="Your task..." required size="2" />
           <input type="hidden" name="userId" value={userId} />
-          <Button type="submit" size="3" radius="none">
+          <Button type="submit" size="2">
             <Icons.Add size={ICON_SIZE} /> Create
           </Button>
         </form>

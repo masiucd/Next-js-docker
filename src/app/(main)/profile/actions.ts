@@ -5,6 +5,7 @@ import {sql} from "drizzle-orm";
 import {revalidatePath} from "next/cache";
 
 import {db} from "@/db";
+import {tasksTable} from "@/db/schema/tasks";
 import {getUserFromSession} from "@/lib/auth";
 
 export async function deleteTask(data: FormData) {
@@ -48,9 +49,10 @@ export async function createTask(data: FormData) {
     throw new Error("Invalid form data");
   }
 
-  await db.execute(
-    sql`insert into tasks (task, user_id) values(${task},${userId})`
-  );
+  await db.insert(tasksTable).values({
+    userId: parseInt(userId, 10),
+    task,
+  });
 
   revalidatePath("/profile");
 }
