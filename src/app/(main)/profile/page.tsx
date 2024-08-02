@@ -1,22 +1,14 @@
-import {
-  Badge,
-  Button,
-  Code,
-  DataList,
-  Flex,
-  IconButton,
-} from "@radix-ui/themes";
+import {Badge, Code, DataList, Flex, IconButton} from "@radix-ui/themes";
 import Link from "next/link";
 import {redirect} from "next/navigation";
 
 import {ICON_SIZE, Icons} from "@/_components/icons";
-import {Input} from "@/_components/input";
 import {PageWrapper} from "@/_components/page-wrapper";
-import {H1, H3, Lead} from "@/_components/typography";
+import {H1, Lead, Span, Strong} from "@/_components/typography";
 import {getUserFromSession} from "@/lib/auth";
 import {sleep} from "@/lib/sleep";
 
-import {createTask} from "./actions";
+import {CreateTaskForm} from "./_components/create-task-form";
 import {getUserData, type UserDataType} from "./api";
 import {UserTasks} from "./user-tasks";
 
@@ -33,8 +25,17 @@ async function ProfilePage() {
     <PageWrapper>
       <Flex asChild direction="column" gap="2" mb="5">
         <aside>
-          <H1>Profile</H1>
-          <Lead>Welcome</Lead>
+          <H1>
+            Welcome{" "}
+            <Span
+              className="relative inline-block after:absolute after:bottom-1 after:left-0 after:h-2 after:w-full after:-rotate-1 after:bg-indigo-500/40  after:content-[''] "
+              color="iris"
+            >
+              {" "}
+              {profileData.name}
+            </Span>
+          </H1>
+          <Lead>Here you can view your tasks and create new ones</Lead>
         </aside>
       </Flex>
       <Flex
@@ -57,16 +58,8 @@ async function ProfilePage() {
 function CreateNewTask({userId}: {userId: number}) {
   return (
     <Flex direction="column">
-      <H3>Create new task</H3>
-      <Flex asChild align="center">
-        <form action={createTask}>
-          <Input name="task" placeholder="Your task..." required size="2" />
-          <input type="hidden" name="userId" value={userId} />
-          <Button type="submit" size="2">
-            <Icons.Add size={ICON_SIZE} /> Create
-          </Button>
-        </form>
-      </Flex>
+      <Strong>Create new task</Strong>
+      <CreateTaskForm userId={userId} />
     </Flex>
   );
 }

@@ -37,7 +37,7 @@ export async function updateTask(data: FormData) {
   return null;
 }
 
-export async function createTask(data: FormData) {
+export async function createTask(prevError: null | boolean, data: FormData) {
   let userFromSession = await getUserFromSession();
   if (!userFromSession) {
     throw new Error("User not logged in");
@@ -46,7 +46,7 @@ export async function createTask(data: FormData) {
   let task = data.get("task");
   let userId = data.get("userId");
   if (typeof userId !== "string" || typeof task !== "string") {
-    throw new Error("Invalid form data");
+    return true;
   }
 
   await db.insert(tasksTable).values({
@@ -55,4 +55,5 @@ export async function createTask(data: FormData) {
   });
 
   revalidatePath("/profile");
+  return null;
 }
