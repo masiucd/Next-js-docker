@@ -1,7 +1,7 @@
 "use client";
 import {Box, Button, Callout, Flex} from "@radix-ui/themes";
 import {redirect} from "next/navigation";
-import {useFormState} from "react-dom";
+import {useActionState} from "react";
 
 import {cn} from "@/lib/cn";
 
@@ -25,7 +25,7 @@ type Props = {
 };
 
 export function LoginForm({login}: Props) {
-  let [state, action] = useFormState(login, null, "");
+  let [state, action, isPending] = useActionState(login, null);
   if (state?.ok) {
     redirect("/profile");
   }
@@ -43,6 +43,7 @@ export function LoginForm({login}: Props) {
                 placeholder="name@ex.com"
                 size="3"
                 className={cn(state && !state.ok && "border border-red-500")}
+                disabled={isPending}
               />
             </InputGroup>
             <InputGroup>
@@ -56,8 +57,8 @@ export function LoginForm({login}: Props) {
                 className={cn(state && !state.ok && "border border-red-500")}
               />
             </InputGroup>
-            <Button type="submit" size="3">
-              <Span weight="bold">Sign in</Span>
+            <Button type="submit" size="3" disabled={isPending}>
+              <Span weight="bold">{isPending ? "Signing in" : "Sign in"}</Span>
             </Button>
           </fieldset>
         </Flex>
