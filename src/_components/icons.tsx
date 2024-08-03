@@ -1,4 +1,5 @@
 import {
+  Bomb,
   Clock,
   Copy,
   Delete,
@@ -6,6 +7,7 @@ import {
   Info,
   type LucideProps,
   Plus,
+  TriangleAlert,
 } from "lucide-react";
 
 export let Icons = Object.freeze({
@@ -15,6 +17,12 @@ export let Icons = Object.freeze({
   Info: (props: LucideProps) => <Info size={ICON_SIZE} {...props} />,
   Snooze: (props: LucideProps) => <Clock size={ICON_SIZE} {...props} />,
   Add: (props: LucideProps) => <Plus size={ICON_SIZE} {...props} />,
+  Warning: (props: LucideProps) => (
+    <TriangleAlert size={ICON_SIZE} {...props} />
+  ),
+  Error: (props: LucideProps) => <Bomb size={ICON_SIZE} {...props} />,
 });
+
+export type {LucideProps as IconsProps};
 
 export const ICON_SIZE = 16;
