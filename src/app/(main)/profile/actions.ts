@@ -1,7 +1,7 @@
 "use server";
 import "server-only";
 
-import {sql} from "drizzle-orm";
+import {eq} from "drizzle-orm";
 import {revalidatePath} from "next/cache";
 
 import {db} from "@/db";
@@ -18,10 +18,8 @@ export async function deleteTask(data: FormData) {
   if (typeof taskId !== "string") {
     throw new Error("Invalid form data");
   }
-
-  await db.execute(
-    sql`delete from tasks t where t.id = ${taskId} and t.user_id = ${userFromSession.userId}`
-  );
+  await db.delete(tasksTable).where(eq(tasksTable.id, parseInt(taskId, 10)));
+  revalidatePath("/profile");
 }
 
 export async function updateTask(data: FormData) {
