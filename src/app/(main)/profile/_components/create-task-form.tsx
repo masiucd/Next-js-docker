@@ -2,10 +2,11 @@
 
 import {Button, Flex} from "@radix-ui/themes";
 import {useActionState, useRef} from "react";
-import {useFormState} from "react-dom";
 
+import {Callout} from "@/_components/callout";
 import {Icons} from "@/_components/icons";
 import {Input} from "@/_components/input";
+import {Span} from "@/_components/typography";
 
 import {createTask} from "../actions";
 
@@ -18,7 +19,7 @@ export function CreateTaskForm({userId}: Props) {
   let ref = useRef<HTMLFormElement | null>(null);
   return (
     <>
-      <Flex asChild align="center">
+      <Flex asChild direction="column" gap="1">
         <form
           action={async (data) => {
             await action(data);
@@ -36,12 +37,16 @@ export function CreateTaskForm({userId}: Props) {
             disabled={isPending}
           />
           <input type="hidden" name="userId" value={userId} />
-          <Button type="submit" size="2" disabled={isPending}>
+          <Button type="submit" size="2" variant="soft" disabled={isPending}>
             <Icons.Add /> {isPending ? "Creating..." : "Create task"}
           </Button>
         </form>
       </Flex>
-      {error && <p>ooops</p>}
+      {error && (
+        <Callout type="info">
+          <Span>Could not create new task</Span>
+        </Callout>
+      )}
     </>
   );
 }

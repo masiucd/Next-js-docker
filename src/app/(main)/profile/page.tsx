@@ -1,11 +1,11 @@
 import {Badge, Code, DataList, Flex} from "@radix-ui/themes";
-import Link from "next/link";
 import {redirect} from "next/navigation";
 
 import {CopyButton} from "@/_components/copy-button";
 import {PageWrapper} from "@/_components/page-wrapper";
 import {H1, Lead, Span, Strong} from "@/_components/typography";
 import {getUserFromSession} from "@/lib/auth";
+import {appTheme} from "@/lib/config";
 import {sleep} from "@/lib/sleep";
 
 import {CreateTaskForm} from "./_components/create-task-form";
@@ -18,9 +18,7 @@ async function ProfilePage() {
   if (userFromSession === null) {
     redirect("/");
   }
-
   let {profileData, tasks} = await getUserData(userFromSession);
-
   return (
     <PageWrapper>
       <Flex asChild direction="column" gap="2" mb="5">
@@ -29,7 +27,7 @@ async function ProfilePage() {
             Welcome{" "}
             <Span
               className="relative inline-block after:absolute after:bottom-1 after:left-0 after:h-2 after:w-full after:-rotate-1 after:bg-indigo-500/40  after:content-[''] "
-              color="iris"
+              color={appTheme.accentColor}
             >
               {" "}
               {profileData.name}
@@ -42,10 +40,10 @@ async function ProfilePage() {
         gap="8"
         direction="column"
         p="3"
-        className="mx-auto w-[62rem] border border-blue-400"
+        className="mx-auto w-[62rem]"
         justify="between"
       >
-        <Flex>
+        <Flex justify="between" p="1" width="900px">
           <UserData userData={profileData} />
           <CreateNewTask userId={profileData.id} />
         </Flex>
@@ -57,7 +55,7 @@ async function ProfilePage() {
 
 function CreateNewTask({userId}: {userId: number}) {
   return (
-    <Flex direction="column">
+    <Flex direction="column" width="300px">
       <Strong>Create new task</Strong>
       <CreateTaskForm userId={userId} />
     </Flex>
@@ -70,11 +68,11 @@ function UserData({userData}: {userData: UserDataType}) {
       <DataList.Root>
         <DataList.Item align="center">
           <DataList.Label minWidth="88px">
-            <Span weight="bold">Status</Span>
+            <Span weight="bold">Role</Span>
           </DataList.Label>
           <DataList.Value>
-            <Badge color="jade" variant="soft">
-              Authorized
+            <Badge color={appTheme.accentColor} variant="soft">
+              User
             </Badge>
           </DataList.Value>
         </DataList.Item>
@@ -100,7 +98,7 @@ function UserData({userData}: {userData: UserDataType}) {
             <Span weight="bold">Email</Span>
           </DataList.Label>
           <DataList.Value>
-            <Link href={userData.email}>{userData.email}</Link>
+            <Span>{userData.email}</Span>
           </DataList.Value>
         </DataList.Item>
       </DataList.Root>

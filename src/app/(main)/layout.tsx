@@ -1,4 +1,4 @@
-import {Button, Flex} from "@radix-ui/themes";
+import {Box, Button, Flex} from "@radix-ui/themes";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 import type {ReactNode} from "react";
@@ -26,8 +26,15 @@ async function Header() {
   let userFromSession = await getUserFromSession();
   return (
     <header className="bg-gray-100 shadow">
-      <Flex height="5rem" className="mx-auto w-app-width" align="center">
-        <Strong>Docker Next-JS</Strong>
+      <Flex
+        height="5rem"
+        className="mx-auto w-app-width"
+        align="center"
+        justify="between"
+      >
+        <Box>
+          <Strong>Docker Next-JS</Strong>
+        </Box>
         {userFromSession ? (
           <form
             action={async () => {
@@ -37,7 +44,9 @@ async function Header() {
               redirect("/");
             }}
           >
-            <Button type="submit">Logout</Button>
+            <Button variant="ghost" type="submit">
+              Logout
+            </Button>
           </form>
         ) : null}
       </Flex>

@@ -6,6 +6,8 @@ import type {Metadata} from "next";
 import {Inter} from "next/font/google";
 import type {ReactNode} from "react";
 
+import {appTheme} from "@/lib/config";
+
 const inter = Inter({subsets: ["latin"]});
 
 export const metadata: Metadata = {
@@ -21,7 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Theme accentColor="iris" grayColor="sand" radius="small" scaling="95%">
+        <Theme
+          accentColor={appTheme.accentColor}
+          grayColor={appTheme.grayColor}
+          radius={appTheme.radius}
+          scaling={appTheme.scaling}
+        >
           {children}
         </Theme>
       </body>
