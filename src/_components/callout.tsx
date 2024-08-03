@@ -2,6 +2,8 @@ import {Callout as RadixCallout} from "@radix-ui/themes";
 import type {RootProps} from "@radix-ui/themes/src/components/callout.jsx";
 import {type PropsWithChildren, type ReactNode} from "react";
 
+import {appTheme} from "@/lib/config";
+
 import {Icons, type IconsProps} from "./icons";
 
 type Props = {
@@ -73,7 +75,7 @@ function getCalloutStyle(type: "info" | "warning" | "error"): {
     case "info":
     default:
       return {
-        color: "iris",
+        color: appTheme.accentColor,
         IconComponent: Icons.Info,
       };
   }
