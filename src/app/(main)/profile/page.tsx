@@ -1,8 +1,8 @@
-import {Badge, Code, DataList, Flex, IconButton} from "@radix-ui/themes";
+import {Badge, Code, DataList, Flex} from "@radix-ui/themes";
 import Link from "next/link";
 import {redirect} from "next/navigation";
 
-import {ICON_SIZE, Icons} from "@/_components/icons";
+import {CopyButton} from "@/_components/copy-button";
 import {PageWrapper} from "@/_components/page-wrapper";
 import {H1, Lead, Span, Strong} from "@/_components/typography";
 import {getUserFromSession} from "@/lib/auth";
@@ -69,7 +69,9 @@ function UserData({userData}: {userData: UserDataType}) {
     <Flex direction="column" gap="4" width="400px">
       <DataList.Root>
         <DataList.Item align="center">
-          <DataList.Label minWidth="88px">Status</DataList.Label>
+          <DataList.Label minWidth="88px">
+            <Span weight="bold">Status</Span>
+          </DataList.Label>
           <DataList.Value>
             <Badge color="jade" variant="soft">
               Authorized
@@ -77,28 +79,26 @@ function UserData({userData}: {userData: UserDataType}) {
           </DataList.Value>
         </DataList.Item>
         <DataList.Item>
-          <DataList.Label minWidth="88px">ID</DataList.Label>
+          <DataList.Label minWidth="88px">
+            <Span weight="bold">ID</Span>
+          </DataList.Label>
           <DataList.Value>
             <Flex align="center" gap="2">
               <Code variant="ghost">{userData.id}</Code>
-              <IconButton
-                size="1"
-                aria-label="Copy value"
-                color="gray"
-                variant="ghost"
-                // TODO: Implement copy to clipboard
-              >
-                <Icons.Copy size={ICON_SIZE} />
-              </IconButton>
+              <CopyButton text={userData.id.toString()} />
             </Flex>
           </DataList.Value>
         </DataList.Item>
         <DataList.Item>
-          <DataList.Label minWidth="88px">Name</DataList.Label>
+          <DataList.Label minWidth="88px">
+            <Span weight="bold">Name</Span>
+          </DataList.Label>
           <DataList.Value>{userData.name}</DataList.Value>
         </DataList.Item>
         <DataList.Item>
-          <DataList.Label minWidth="88px">Email</DataList.Label>
+          <DataList.Label minWidth="88px">
+            <Span weight="bold">Email</Span>
+          </DataList.Label>
           <DataList.Value>
             <Link href={userData.email}>{userData.email}</Link>
           </DataList.Value>
