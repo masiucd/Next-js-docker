@@ -3,8 +3,9 @@ import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 import type {PropsWithChildren, ReactNode} from "react";
 
-import {P, Strong} from "@/_components/typography";
+import {H5, P, Span} from "@/_components/typography";
 import {getUserFromSession} from "@/lib/auth";
+import {appTheme} from "@/lib/config";
 
 export default function MainLayout({
   children,
@@ -28,7 +29,14 @@ async function Header() {
     <header className="bg-gray-50 shadow">
       <Wrapper justify="between">
         <Box>
-          <Strong>Docker Next-JS</Strong>
+          <H5>
+            <Span color={appTheme.accentColor} weight="bold">
+              Task
+            </Span>{" "}
+            <Span color="gray" weight="bold">
+              Manager
+            </Span>
+          </H5>
         </Box>
         {userFromSession ? (
           <form
@@ -54,7 +62,15 @@ function Footer() {
     <footer className="bg-gray-50 shadow">
       <Wrapper>
         <P asChild size="2">
-          <small>© {new Date().getFullYear()} Docker Next-JS</small>
+          <small>
+            © {new Date().getFullYear()}{" "}
+            <Span color={appTheme.accentColor} weight="bold">
+              Task
+            </Span>{" "}
+            <Span color="gray" weight="bold">
+              Manager
+            </Span>
+          </small>
         </P>
       </Wrapper>
     </footer>

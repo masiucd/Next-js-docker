@@ -24,7 +24,9 @@ import type {TaskType} from "./api";
 export function UserTasks({tasks}: {tasks: TaskType[]}) {
   let [selectedTask, setSelectedTask] = useState<TaskType | null>(null);
   let enabled = tasks.length > 0 && selectedTask !== null;
-
+  const clearClientStateTask = () => {
+    setSelectedTask(null);
+  };
   return (
     <Flex direction="column" gap="5">
       {tasks.length === 0 ? (
@@ -44,33 +46,26 @@ export function UserTasks({tasks}: {tasks: TaskType[]}) {
       )}
 
       <TaskActionsWrapper>
-        <EditTask enabled={enabled} selectedTask={selectedTask} />
+        <EditTask
+          enabled={enabled}
+          selectedTask={selectedTask}
+          clearClientStateTask={clearClientStateTask}
+        />
         <DeleteTask
           selectedTask={selectedTask}
           enabled={enabled}
-          clearClientStateTask={() => {
-            setSelectedTask(null);
-          }}
+          clearClientStateTask={clearClientStateTask}
         />
-        <CompleteTask enabled={enabled} selectedTask={selectedTask} />
+        <CompleteTask
+          enabled={enabled}
+          selectedTask={selectedTask}
+          clearSelectedTask={clearClientStateTask}
+        />
       </TaskActionsWrapper>
     </Flex>
   );
 }
 
-type Variant = "classic" | "solid" | "soft" | "surface" | "outline" | "ghost";
-function getTaskVariant(
-  task: TaskType,
-  selectedTask: TaskType | null
-): Variant {
-  if (selectedTask?.id === task.id) {
-    return "solid";
-  }
-  if (task.completed) {
-    return "outline";
-  }
-  return "ghost";
-}
 function TaskItems(props: {
   selectedTask: TaskType | null;
   tasks: TaskType[];
@@ -117,10 +112,10 @@ function TaskActionsWrapper(props: PropsWithChildren) {
   );
 }
 
-// TODO
 function CompleteTask(props: {
   enabled: boolean;
   selectedTask: TaskType | null;
+  clearSelectedTask: () => void;
 }) {
   let [error, action, isPending] = useFormState(completeTask, null);
   useEffect(() => {
@@ -130,7 +125,13 @@ function CompleteTask(props: {
   }, [error]);
 
   return (
-    <form action={action} className="flex-1">
+    <form
+      action={async (data) => {
+        action(data);
+        props.clearSelectedTask();
+      }}
+      className="flex-1"
+    >
       {props.selectedTask && (
         <>
           <input type="hidden" name="task-id" value={props.selectedTask.id} />
@@ -150,21 +151,11 @@ function CompleteTask(props: {
         disabled={isPending || !props.enabled}
       >
         <Icons.Complete />
-        {getCompleteText(props.selectedTask?.completed ?? false, isPending)}
+        {getCompleteText(!!props.selectedTask?.completed, isPending)}
       </Button>
       <Toast />
     </form>
   );
-}
-
-function getCompleteText(completed: boolean, isPending: boolean) {
-  if (completed) {
-    return "Uncomplete";
-  }
-  if (isPending) {
-    return "Completing";
-  }
-  return "Complete";
 }
 
 function DeleteTask(props: {
@@ -209,7 +200,11 @@ function DeleteTask(props: {
   );
 }
 
-function EditTask(props: {enabled: boolean; selectedTask: TaskType | null}) {
+function EditTask(props: {
+  enabled: boolean;
+  selectedTask: TaskType | null;
+  clearClientStateTask: () => void;
+}) {
   let [error, action, isPending] = useActionState(updateTask, null);
   return (
     <Dialog
@@ -227,7 +222,12 @@ function EditTask(props: {enabled: boolean; selectedTask: TaskType | null}) {
       description="Edit the task description"
     >
       <Flex asChild direction="column" gap="1">
-        <form action={action}>
+        <form
+          action={async (data) => {
+            action(data);
+            props.clearClientStateTask();
+          }}
+        >
           <Input type="text" name="task-value" />
           {props.selectedTask && (
             <input type="hidden" name="task-id" value={props.selectedTask.id} />
@@ -251,4 +251,28 @@ function EditTask(props: {enabled: boolean; selectedTask: TaskType | null}) {
       </Flex>
     </Dialog>
   );
+}
+
+type Variant = "classic" | "solid" | "soft" | "surface" | "outline" | "ghost";
+function getTaskVariant(
+  task: TaskType,
+  selectedTask: TaskType | null
+): Variant {
+  if (selectedTask?.id === task.id) {
+    return "solid";
+  }
+  if (task.completed) {
+    return "outline";
+  }
+  return "ghost";
+}
+
+function getCompleteText(completed: boolean, isPending: boolean) {
+  if (completed) {
+    return "Uncomplete";
+  }
+  if (isPending) {
+    return "Completing";
+  }
+  return "Complete";
 }
