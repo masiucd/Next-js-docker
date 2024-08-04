@@ -27,5 +27,6 @@ export async function decrypt(input: string) {
   let {payload} = await jwtVerify(input, key, {
     algorithms: ["HS256"],
   });
-  return payloadSchema.parse(payload);
+
+  return payloadSchema.safeParse(payload);
 }

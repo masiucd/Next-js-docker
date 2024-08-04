@@ -38,7 +38,7 @@ export async function updateTask(prevError: null | boolean, data: FormData) {
     .where(eq(tasksTable.id, parseInt(taskId, 10)));
 
   revalidatePath("/profile");
-  return null;
+  return false;
 }
 
 export async function createTask(prevError: null | boolean, data: FormData) {
@@ -74,7 +74,7 @@ export async function completeTask(prevError: null | boolean, data: FormData) {
     return true;
   }
 
-  let flipped = !!completed;
+  let flipped = completed === "true" ? false : true;
   await db
     .update(tasksTable)
     .set({completed: flipped})

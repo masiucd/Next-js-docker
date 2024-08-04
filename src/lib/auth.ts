@@ -9,8 +9,10 @@ export async function getUserFromSession() {
   let cookieStore = cookies();
   let session = cookieStore.get("session");
   if (session) {
-    let data = await decrypt(session.value);
-    if (data.expires && parseISO(data.expires) > new Date()) return data;
+    let {success, data} = await decrypt(session.value);
+    if (success && data) {
+      if (data.expires && parseISO(data.expires) > new Date()) return data;
+    }
   }
   return null;
 }

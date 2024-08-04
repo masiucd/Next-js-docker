@@ -1,7 +1,12 @@
 "use client";
 
-import {Box, Button, Flex, Radio, Tooltip} from "@radix-ui/themes";
-import {type PropsWithChildren, useActionState, useState} from "react";
+import {Box, Button, Flex} from "@radix-ui/themes";
+import {
+  type PropsWithChildren,
+  useActionState,
+  useEffect,
+  useState,
+} from "react";
 import {useFormState} from "react-dom";
 
 import {Callout} from "@/_components/callout";
@@ -9,14 +14,16 @@ import {Dialog} from "@/_components/dialog";
 import {ICON_SIZE, Icons} from "@/_components/icons";
 import {Input} from "@/_components/input";
 import {PopOver} from "@/_components/popover";
-import {Label, Span} from "@/_components/typography";
+import {notifyError, Toast} from "@/_components/toast";
+import {Label, P, Span} from "@/_components/typography";
+import {cn} from "@/lib/cn";
 
 import {completeTask, deleteTask, updateTask} from "./actions";
 import type {TaskType} from "./api";
 
 export function UserTasks({tasks}: {tasks: TaskType[]}) {
-  let [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
-  let enabled = tasks.length > 0 && selectedTaskId !== null;
+  let [selectedTask, setSelectedTask] = useState<TaskType | null>(null);
+  let enabled = tasks.length > 0 && selectedTask !== null;
 
   return (
     <Flex direction="column" gap="5">
@@ -28,32 +35,48 @@ export function UserTasks({tasks}: {tasks: TaskType[]}) {
         </Box>
       ) : (
         <TaskItems
-          onValueChange={(value: string) => setSelectedTaskId(value)}
-          selectedTaskId={selectedTaskId}
+          setTask={(task) => {
+            setSelectedTask(task);
+          }}
+          selectedTask={selectedTask}
           tasks={tasks}
         />
       )}
 
       <TaskActionsWrapper>
-        <EditTask enabled={enabled} selectedTaskId={selectedTaskId} />
+        <EditTask enabled={enabled} selectedTask={selectedTask} />
         <DeleteTask
-          selectedTaskId={selectedTaskId}
+          selectedTask={selectedTask}
           enabled={enabled}
           clearClientStateTask={() => {
-            setSelectedTaskId(null);
+            setSelectedTask(null);
           }}
         />
-        <CompleteTask enabled={enabled} selectedTaskId={selectedTaskId} />
+        <CompleteTask enabled={enabled} selectedTask={selectedTask} />
       </TaskActionsWrapper>
     </Flex>
   );
 }
 
+type Variant = "classic" | "solid" | "soft" | "surface" | "outline" | "ghost";
+function getTaskVariant(
+  task: TaskType,
+  selectedTask: TaskType | null
+): Variant {
+  // props.selectedTask?.id === t.id ? "solid" : "soft"
+  if (selectedTask?.id === task.id) {
+    return "solid";
+  }
+  if (task.completed) {
+    return "outline";
+  }
+  return "ghost";
+}
 function TaskItems(props: {
-  selectedTaskId: string | null;
+  selectedTask: TaskType | null;
   tasks: TaskType[];
   // eslint-disable-next-line no-unused-vars
-  onValueChange: (value: string) => void;
+  setTask: (task: TaskType) => void;
 }) {
   return (
     <Flex asChild direction="column" gap="2">
@@ -63,12 +86,20 @@ function TaskItems(props: {
             <li>
               <Label>
                 <Flex gap="2">
-                  <Radio
-                    value={t.id.toString()}
-                    onValueChange={props.onValueChange}
-                    checked={props.selectedTaskId === t.id.toString()}
-                  />
-                  {t.task}
+                  <Button
+                    size="1"
+                    type="button"
+                    variant={getTaskVariant(t, props.selectedTask)}
+                    onClick={() => props.setTask(t)}
+                  >
+                    <Span
+                      weight="medium"
+                      size="2"
+                      className={cn(t.completed && "line-through")}
+                    >
+                      {t.task}
+                    </Span>
+                  </Button>
                 </Flex>
               </Label>
             </li>
@@ -90,19 +121,24 @@ function TaskActionsWrapper(props: PropsWithChildren) {
 // TODO
 function CompleteTask(props: {
   enabled: boolean;
-  selectedTaskId: string | null;
-  completed: boolean;
+  selectedTask: TaskType | null;
 }) {
-  let [state, action, isPending] = useFormState(completeTask, null);
+  let [error, action, isPending] = useFormState(completeTask, null);
+  useEffect(() => {
+    if (error) {
+      notifyError("Something went wrong. Please try again.");
+    }
+  }, [error]);
+
   return (
     <form action={action} className="flex-1">
-      {props.selectedTaskId && (
+      {props.selectedTask && (
         <>
-          <input type="hidden" name="taskId" value={props.selectedTaskId} />
+          <input type="hidden" name="task-id" value={props.selectedTask.id} />
           <input
             type="hidden"
             name="completed"
-            value={props.completed.toString()}
+            value={props.selectedTask.completed.toString()}
           />
         </>
       )}
@@ -114,14 +150,26 @@ function CompleteTask(props: {
         variant="outline"
         disabled={isPending || !props.enabled}
       >
-        <Icons.Complete /> {isPending ? "Completing..." : "Complete"}
+        <Icons.Complete />
+        {getCompleteText(props.selectedTask?.completed ?? false, isPending)}
       </Button>
+      <Toast />
     </form>
   );
 }
 
+function getCompleteText(completed: boolean, isPending: boolean) {
+  if (completed) {
+    return "Uncomplete";
+  }
+  if (isPending) {
+    return "Completing";
+  }
+  return "Complete";
+}
+
 function DeleteTask(props: {
-  selectedTaskId: string | null;
+  selectedTask: TaskType | null;
   enabled: boolean;
   clearClientStateTask: () => void;
 }) {
@@ -138,7 +186,7 @@ function DeleteTask(props: {
             type="submit"
             size="1"
             name="delete"
-            value={props.selectedTaskId ?? undefined}
+            value={props.selectedTask?.id}
           >
             Delete
           </Button>
@@ -154,46 +202,54 @@ function DeleteTask(props: {
           <Icons.Delete size={ICON_SIZE} /> Delete
         </Button>
       }
-    />
+    >
+      <P>
+        Are you sure you want to delete this task? This action cannot be undone.
+      </P>
+    </PopOver>
   );
 }
 
-function EditTask(props: {enabled: boolean; selectedTaskId: string | null}) {
-  let [state, action, isPending] = useActionState(updateTask, null);
-  console.log("state", state);
+function EditTask(props: {enabled: boolean; selectedTask: TaskType | null}) {
+  let [error, action, isPending] = useActionState(updateTask, null);
   return (
-    <Tooltip content="Edit">
-      <Dialog
-        buttonComponent={
-          <Button
-            name="edit"
-            radius="none"
-            variant="outline"
-            disabled={isPending || !props.enabled}
-          >
-            <Icons.Edit size={ICON_SIZE} /> Edit
-          </Button>
-        }
-        title="Edit task"
-        description="Edit the task description"
-      >
-        <Flex asChild direction="column" gap="1">
-          <form action={action}>
-            <Input type="text" name="task-value" />
-            {props.selectedTaskId && (
-              <input
-                type="hidden"
-                name="task-id"
-                value={props.selectedTaskId}
-              />
-            )}
-
-            <Button disabled={isPending} type="submit">
-              <Icons.Edit /> {isPending ? "Editing" : "Edit"}
-            </Button>
-          </form>
-        </Flex>
-      </Dialog>
-    </Tooltip>
+    <Dialog
+      buttonComponent={
+        <Button
+          name="edit"
+          radius="none"
+          variant="outline"
+          disabled={isPending || !props.enabled}
+        >
+          <Icons.Edit size={ICON_SIZE} /> Edit
+        </Button>
+      }
+      title={`Edit task "${props.selectedTask?.task}"`}
+      description="Edit the task description"
+    >
+      <Flex asChild direction="column" gap="1">
+        <form action={action}>
+          <Input type="text" name="task-value" />
+          {props.selectedTask && (
+            <input type="hidden" name="task-id" value={props.selectedTask.id} />
+          )}
+          <Flex gap="3" mt="4" justify="end">
+            <Dialog.Close>
+              <Button variant="soft">Cancel</Button>
+            </Dialog.Close>
+            <Dialog.Close>
+              <Button disabled={isPending} type="submit" variant="solid">
+                <Icons.Edit /> {isPending ? "Editing" : "Edit"}
+              </Button>
+            </Dialog.Close>
+          </Flex>
+          {error && (
+            <Callout type="error">
+              Something went wrong. Please try again.
+            </Callout>
+          )}
+        </form>
+      </Flex>
+    </Dialog>
   );
 }
