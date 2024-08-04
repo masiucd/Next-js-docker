@@ -19,7 +19,8 @@ export async function getUserData(userFromSession: Payload) {
     let tasks = await tx
       .select()
       .from(t)
-      .where(eq(t.userId, userFromSession.userId));
+      .where(eq(t.userId, userFromSession.userId))
+      .orderBy(t.completed);
 
     let profileData = await tx
       .select({
