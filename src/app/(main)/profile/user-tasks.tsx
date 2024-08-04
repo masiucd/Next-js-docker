@@ -63,7 +63,6 @@ function getTaskVariant(
   task: TaskType,
   selectedTask: TaskType | null
 ): Variant {
-  // props.selectedTask?.id === t.id ? "solid" : "soft"
   if (selectedTask?.id === task.id) {
     return "solid";
   }

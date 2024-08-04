@@ -1,7 +1,7 @@
-import {Box, Button, Flex} from "@radix-ui/themes";
+import {Box, Button, Flex, type FlexProps} from "@radix-ui/themes";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
-import type {ReactNode} from "react";
+import type {PropsWithChildren, ReactNode} from "react";
 
 import {P, Strong} from "@/_components/typography";
 import {getUserFromSession} from "@/lib/auth";
@@ -25,13 +25,8 @@ export default function MainLayout({
 async function Header() {
   let userFromSession = await getUserFromSession();
   return (
-    <header className="bg-gray-100 shadow">
-      <Flex
-        height="5rem"
-        className="mx-auto w-app-width"
-        align="center"
-        justify="between"
-      >
+    <header className="bg-gray-50 shadow">
+      <Wrapper justify="between">
         <Box>
           <Strong>Docker Next-JS</Strong>
         </Box>
@@ -49,19 +44,33 @@ async function Header() {
             </Button>
           </form>
         ) : null}
-      </Flex>
+      </Wrapper>
     </header>
   );
 }
 
 function Footer() {
   return (
-    <footer className="bg-gray-100 shadow">
-      <Flex height="5rem" className="mx-auto w-app-width" align="center">
+    <footer className="bg-gray-50 shadow">
+      <Wrapper>
         <P asChild size="2">
           <small>© {new Date().getFullYear()} Docker Next-JS</small>
         </P>
-      </Flex>
+      </Wrapper>
     </footer>
+  );
+}
+
+function Wrapper(props: PropsWithChildren<FlexProps>) {
+  return (
+    <Flex
+      height="5rem"
+      className="mx-auto max-w-6xl"
+      align="center"
+      px="3"
+      {...props}
+    >
+      {props.children}
+    </Flex>
   );
 }

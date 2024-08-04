@@ -8,7 +8,7 @@ import type {ReactNode} from "react";
 
 import {appTheme} from "@/lib/config";
 
-const inter = Inter({subsets: ["latin"]});
+const font = Inter({subsets: ["latin"]});
 
 export const metadata: Metadata = {
   title: "Docker with Next.js",
@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={font.className}>
         <Theme
           accentColor={appTheme.accentColor}
           grayColor={appTheme.grayColor}

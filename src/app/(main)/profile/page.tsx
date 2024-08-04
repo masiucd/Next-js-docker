@@ -20,7 +20,7 @@ async function ProfilePage() {
   }
   let {profileData, tasks} = await getUserData(userFromSession);
   return (
-    <PageWrapper>
+    <PageWrapper className="px-2">
       <Flex asChild direction="column" gap="2" mb="5">
         <aside>
           <H1>
@@ -40,12 +40,14 @@ async function ProfilePage() {
         gap="8"
         direction="column"
         p="3"
-        className="mx-auto w-[62rem]"
+        className="mx-auto w-full md:max-w-[62rem] "
         justify="between"
       >
-        <Flex justify="between" p="1" width="900px">
-          <UserData userData={profileData} />
-          <CreateNewTask userId={profileData.id} />
+        <Flex justify="between" p="1" asChild>
+          <div className="w-[400px] flex-col gap-5 sm:w-[600px] sm:flex-row lg:gap-0 ">
+            <UserData userData={profileData} />
+            <CreateNewTask userId={profileData.id} />
+          </div>
         </Flex>
         <UserTasks tasks={tasks} />
       </Flex>
@@ -55,7 +57,7 @@ async function ProfilePage() {
 
 function CreateNewTask({userId}: {userId: number}) {
   return (
-    <Flex direction="column" width="300px">
+    <Flex direction="column" flexGrow="1">
       <Strong>Create new task</Strong>
       <CreateTaskForm userId={userId} />
     </Flex>
@@ -64,7 +66,7 @@ function CreateNewTask({userId}: {userId: number}) {
 
 function UserData({userData}: {userData: UserDataType}) {
   return (
-    <Flex direction="column" gap="4" width="400px">
+    <Flex direction="column" gap="4" flexGrow="1">
       <DataList.Root>
         <DataList.Item align="center">
           <DataList.Label minWidth="88px">
