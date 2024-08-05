@@ -47,6 +47,21 @@ pnpm dev
 
 The env file is included in the repository. You can change the values as needed.
 
+### Docker compose
+
+The docker compose file is included in the repository. You can change the values as needed.
+To create the containers run the following command:
+
+```bash
+docker-compose up -d
+```
+
+To stop the containers run the following command:
+
+```bash
+docker-compose down
+```
+
 ### DB generation
 
 You gen generate the database with the following command:
