@@ -46,3 +46,27 @@ pnpm dev
 ### Env file
 
 The env file is included in the repository. You can change the values as needed.
+
+### DB generation
+
+You gen generate the database with the following command:
+
+```bash
+pnpm db:generate
+```
+
+### DB migration
+
+You can run the migrations with the following command:
+
+```bash
+pnpm db:migrate
+```
+
+### DB seed
+
+You can seed the database with the following command:
+
+```bash
+pnpm db:seed
+```
