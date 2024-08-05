@@ -2,14 +2,10 @@ services:
   db:
     image: postgres:16.2 # Use the latest version of Postgres
     environment: # Set environment variables
-      # - POSTGRES_PASSWORD=${DB_PASSWORD} # Use the password you set in the .env file
-      - POSTGRES_PASSWORD=root # Use the password you set in the .env file
-      - POSTGRES_USER=root # Use the username you set in the .env file
-      - POSTGRES_DB=masiudb # Use the database name you set in the .env file
-      # - POSTGRES_USER=${DB_USER} # Use the username you set in the .env file
-      # - POSTGRES_DB=${DB_NAME} # Use the database name you set in the .env file
+      - POSTGRES_PASSWORD=${DB_PASSWORD} # Use the password you set in the .env file
+      - POSTGRES_USER=${DB_USER} # Use the username you set in the .env file
+      - POSTGRES_DB=${DB_NAME} # Use the database name you set in the .env file
     ports: # Map the port from the container to the host
-      # - ${DB_PORT}:5432
-      - 5432:5432
+      - ${DB_PORT}:5432
     volumes: # Mount the volume to persist the data
       - ./db-data:/var/lib/postgresql/data
