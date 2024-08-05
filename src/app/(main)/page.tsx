@@ -1,5 +1,4 @@
 import {Box, Flex, Separator} from "@radix-ui/themes";
-import {isBefore, parseISO} from "date-fns";
 import {redirect} from "next/navigation";
 
 import {LoginForm} from "@/_components/login-form";
@@ -36,10 +35,7 @@ async function login(
 
 export default async function Home() {
   let userFromSession = await getUserFromSession();
-  if (
-    userFromSession !== null &&
-    isBefore(parseISO(userFromSession.expires), new Date())
-  ) {
+  if (userFromSession !== null) {
     redirect("/profile");
   }
 
